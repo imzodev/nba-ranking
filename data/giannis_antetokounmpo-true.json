@@ -1,0 +1,62 @@
+{
+  "name": "Giannis Antetokounmpo",
+  "extraction_date": "2025-07-27T21:50:20.772Z",
+  "data_source": "Wikipedia infobox - TRUE extraction",
+  "raw_infobox": {
+    "name": "Giannis Antetokounmpo",
+    "image": "Giannis Antetokounmpo (51915153421) (cropped).jpg",
+    "caption": "Antetokounmpo with the Milwaukee Bucks in 2022",
+    "position": "Power forward / Center (basketball)",
+    "height_ft": "6",
+    "height_in": "11",
+    "weight_lb": "243",
+    "league": "National Basketball Association",
+    "team": "Milwaukee Bucks",
+    "number": "34",
+    "birth_date": "1994",
+    "birth_place": "Athens, Greece",
+    "nationality": "Greek / Nigerian",
+    "draft_year": "2013",
+    "draft_round": "1",
+    "draft_pick": "15",
+    "draft_team": "Milwaukee Bucks",
+    "career_start": "2011",
+    "years1": "2011–2013",
+    "team1": "EFAO Zografou B.C.",
+    "years2": "2013–present",
+    "team2": "Milwaukee Bucks",
+    "highlights": "* List of NBA champions (2021 NBA Finals)\n* NBA Finals Most Valuable Player Award (2021 NBA Finals)\n* 2× NBA Most Valuable Player Award (2018, 2019)\n* 9× List of NBA All-Stars (2017–2025)\n* NBA All-Star Game Kobe Bryant Most Valuable Player Award (2021)\n* 7× All-NBA First Team (2018–2024)\n* 2× All-NBA Team (2016, 2017)\n* NBA Defensive Player of the Year Award (2019)\n* 4× NBA All-Defensive Team (2018–2021)\n* NBA All-Defensive Team (2016)\n* NBA Most Improved Player Award (2016)\n* NBA All-Rookie Team (2013)\n* List of NBA Cup champions (2024 NBA Cup)\n* List of NBA Cup champions (2024 NBA Cup)\n* NBA 75th Anniversary Team\n* FIBA EuroBasket Top Scorer (2022 EuroBasket)\n* Euroscar (2018)\n}}"
+  },
+  "wikipedia_url": "https://en.wikipedia.org/wiki/Giannis_Antetokounmpo",
+  "verified": true,
+  "personal_info": {
+    "full_name": "Giannis Antetokounmpo",
+    "birth_date": "1994",
+    "birth_place": "Athens, Greece",
+    "nationality": "Greek / Nigerian",
+    "height": "6 ft 11 in (2.11 m)",
+    "weight": "243 lb (110 kg)",
+    "position": "Power forward / Center (basketball)",
+    "jersey_number": "34",
+    "high_school": ""
+  },
+  "career_info": {
+    "draft_year": "2013",
+    "draft_round": "1",
+    "draft_pick": "15",
+    "draft_team": "Milwaukee Bucks",
+    "career_start": "2011",
+    "current_team": "Milwaukee Bucks"
+  },
+  "career_history": [],
+  "awards": [],
+  "career_stats": {
+    "points": 0,
+    "rebounds": 0,
+    "assists": 0,
+    "ppg": 0,
+    "rpg": 0,
+    "apg": 0
+  },
+  "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Giannis_Antetokounmpo_%2851915153421%29_%28cropped%29.jpg/500px-Giannis_Antetokounmpo_%2851915153421%29_%28cropped%29.jpg"
+}
