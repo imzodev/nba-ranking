@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id          String   @id @default(cuid())
+  name        String
+  fullName    String?
+  position    String
+  team        String
+  jerseyNumber String?
+  height      String?
+  weight      String?
+  birthDate   String?
+  birthPlace  String?
+  nationality String?
+  highSchool  String?
+  college     String?
+  
+  // Draft info
+  draftYear   String?
+  draftRound  String?
+  draftPick   String?
+  draftTeam   String?
+  
+  // Career timeline
+  careerStart String?
+  careerEnd   String?
+  yearsActive String?
+  
+  // Teams played for
+  careerHistory Json // Array of {years: string, team: string}
+  
+  // Career stats
+  points      Int      @default(0)
+  rebounds    Int      @default(0)
+  assists     Int      @default(0)
+  ppg         Float?   @default(0)
+  rpg         Float?   @default(0)
+  apg         Float?   @default(0)
+  
+  // Accolades
+  championships Int   @default(0)
+  mvps          Int   @default(0)
+  finalsMvps    Int   @default(0)
+  allStar       Int   @default(0)
+  allNBA        Int   @default(0)
+  allDefensive  Int   @default(0)
+  rookieOfYear  Boolean @default(false)
+  hallOfFame    Boolean @default(false)
+  
+  // Awards and highlights
+  highlights    Json? // Array of strings
+  medals        Json? // Array of medal objects
+  
+  // Images and media
+  imageUrl      String?
+  wikipediaUrl  String?
+  
+  // Raw data for reference
+  rawInfobox    Json?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  votes         Vote[]
+  
+  @@unique([name])
+  @@map("players")
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  playerId  String
+  rank      Int      // 1-25
+  sessionId String   // To track unique voters
+  createdAt DateTime @default(now())
+  
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  
+  @@unique([playerId, sessionId])
+  @@map("votes")
+}
