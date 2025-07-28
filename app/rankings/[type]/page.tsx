@@ -4,13 +4,21 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
 import PlayerCard from '@/components/player/PlayerCard';
-import { RANKING_TYPE_LABELS, RANKING_TYPES } from '@/lib/utils/constants';
+import { RANKING_TYPE_LABELS, RANKING_TYPES, type RankingType } from '@/lib/utils/constants';
+
+function isRankingType(val: number): val is RankingType {
+  return RANKING_TYPES.includes(val as RankingType);
+}
 import type { Player } from '@/lib/types/Player';
 import type { AggregatedRanking } from '@/lib/types/Ranking';
 
 export default function RankingsPage() {
   const params = useParams();
-  const rankingType = Number(params.type) || 25 as const; // Default to 25 if not specified
+  let rankingType: RankingType = 25;
+  const parsedType = Number(params.type);
+  if (isRankingType(parsedType)) {
+    rankingType = parsedType;
+  }
   
   const [rankings, setRankings] = useState<AggregatedRanking[]>([]);
   const [players, setPlayers] = useState<Record<string, Player>>({});
@@ -30,7 +38,7 @@ export default function RankingsPage() {
           throw new Error('Failed to fetch players');
         }
         
-        const playersData = await playersResponse.json();
+        const playersData = await playersResponse.json() as Player[];
         const playersMap: Record<string, Player> = {};
         playersData.forEach((player: Player) => {
           playersMap[player.id] = player;
@@ -39,12 +47,12 @@ export default function RankingsPage() {
         setPlayers(playersMap);
         
         // Fetch aggregated rankings
-        const rankingsResponse = await fetch(`/api/rankings/aggregated/${rankingType}`);
+        const rankingsResponse = await fetch(`/api/rankings/aggregated/${Number(rankingType)}`);
         if (!rankingsResponse.ok) {
           throw new Error('Failed to fetch rankings');
         }
         
-        const rankingsData = await rankingsResponse.json();
+        const rankingsData = await rankingsResponse.json() as { rankings: AggregatedRanking[], lastUpdated: string };
         setRankings(rankingsData.rankings || []);
         
         // Format the last updated date
