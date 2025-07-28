@@ -3,6 +3,7 @@ import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
 import HeroSection from "@/components/home/HeroSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
+import StatsSection from "@/components/home/StatsSection";
 
 export default function Home() {
   return (
@@ -14,28 +15,7 @@ export default function Home() {
       <FeaturesSection />
 
       {/* Stats Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div className="p-6">
-              <div className="text-5xl font-bold text-[#17408B] dark:text-[#FDBB30] mb-2">10K+</div>
-              <p className="text-gray-600 dark:text-gray-400 font-medium">Rankings Created</p>
-            </div>
-            <div className="p-6">
-              <div className="text-5xl font-bold text-[#17408B] dark:text-[#FDBB30] mb-2">500+</div>
-              <p className="text-gray-600 dark:text-gray-400 font-medium">NBA Players</p>
-            </div>
-            <div className="p-6">
-              <div className="text-5xl font-bold text-[#17408B] dark:text-[#FDBB30] mb-2">4</div>
-              <p className="text-gray-600 dark:text-gray-400 font-medium">Ranking Types</p>
-            </div>
-            <div className="p-6">
-              <div className="text-5xl font-bold text-[#17408B] dark:text-[#FDBB30] mb-2">24/7</div>
-              <p className="text-gray-600 dark:text-gray-400 font-medium">Real-time Updates</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <StatsSection />
 
       {/* CTA Section */}
       <section className="py-20 bg-[#17408B] text-white relative overflow-hidden">
