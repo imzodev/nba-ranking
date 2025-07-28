@@ -31,19 +31,19 @@ export default function PlayerCard({
 
   return (
     <div 
-      className={`card relative ${isSelected ? 'ring-2 ring-nba-blue' : ''} 
+      className={`card relative bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden transition-all ${isSelected ? 'ring-2 ring-[#17408B] dark:ring-[#FDBB30]' : ''} 
                  ${isDragging ? 'opacity-50' : 'opacity-100'} 
-                 ${onSelect ? 'cursor-pointer' : ''}`}
+                 ${onSelect ? 'cursor-pointer hover:shadow-lg transform hover:-translate-y-1 transition-all' : ''}`}
       onClick={onSelect}
     >
       <div className="flex items-center p-3">
         {rank && (
-          <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-nba-blue text-white rounded-full mr-3 font-bold">
+          <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] rounded-full mr-3 font-bold shadow-sm">
             {rank}
           </div>
         )}
         
-        <div className="flex-shrink-0 w-12 h-12 relative rounded-full overflow-hidden bg-gray-100 mr-3">
+        <div className="flex-shrink-0 w-12 h-12 relative rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 mr-3 border-2 border-gray-200 dark:border-gray-600">
           {player.image_url ? (
             <Image
               src={player.image_url}
@@ -59,7 +59,7 @@ export default function PlayerCard({
         </div>
         
         <div className="flex-grow min-w-0">
-          <h3 className="text-base font-semibold truncate">{player.name}</h3>
+          <h3 className="text-base font-semibold truncate text-gray-900 dark:text-white">{player.name}</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
             {player.position || 'N/A'} • {player.team || 'N/A'}
           </p>
@@ -71,7 +71,7 @@ export default function PlayerCard({
               e.stopPropagation();
               toggleDetails();
             }}
-            className="ml-2 text-gray-500 hover:text-nba-blue"
+            className="ml-2 text-gray-500 hover:text-[#17408B] dark:hover:text-[#FDBB30] transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
               {isExpanded ? (
@@ -85,12 +85,12 @@ export default function PlayerCard({
       </div>
       
       {isExpanded && showDetails && (
-        <div className="px-3 pb-3 pt-1 border-t border-gray-200 dark:border-gray-700">
+        <div className="px-3 pb-3 pt-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
           <div className="grid grid-cols-2 gap-2 text-sm">
             {points !== undefined && (
               <div className="col-span-2 mb-1">
                 <p className="text-gray-500 dark:text-gray-400">Ranking Points</p>
-                <p className="font-medium text-nba-blue">{points.toFixed(1)}</p>
+                <p className="font-medium text-[#17408B] dark:text-[#FDBB30]">{points.toFixed(1)}</p>
               </div>
             )}
             <div>

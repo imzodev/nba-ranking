@@ -57,7 +57,7 @@ function SortableItem({ id, player, rank, onRemove }: SortableItemProps) {
         {onRemove && (
           <button
             onClick={onRemove}
-            className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-[#C9082A] text-white rounded-full p-1 hover:bg-[#C9082A]/90 focus:outline-none focus:ring-2 focus:ring-[#C9082A] shadow-sm"
             aria-label="Remove player"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,11 +123,11 @@ export default function RankingList({
   return (
     <div className="w-full">
       {players.length === 0 ? (
-        <div className="text-center py-8 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg">
-          <p className="text-gray-500 dark:text-gray-400">
+        <div className="text-center py-10 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800/30">
+          <p className="text-gray-600 dark:text-gray-300 font-medium">
             Drag players here to create your ranking
           </p>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 bg-white dark:bg-gray-800 inline-block px-3 py-1 rounded-full">
             Maximum {maxRank} players
           </p>
         </div>
@@ -142,7 +142,7 @@ export default function RankingList({
             items={players.map(player => player.id)} 
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-3">
+            <div className="space-y-4">
               {players.map((player, index) => (
                 <SortableItem
                   key={player.id}
@@ -159,7 +159,7 @@ export default function RankingList({
       
       {players.length > 0 && players.length < maxRank && (
         <div className="text-center mt-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm bg-gray-100 dark:bg-gray-800 inline-block px-3 py-1 rounded-full text-gray-600 dark:text-gray-300">
             {players.length} of {maxRank} players selected
           </p>
         </div>
@@ -167,7 +167,7 @@ export default function RankingList({
       
       {players.length >= maxRank && (
         <div className="text-center mt-4">
-          <p className="text-sm text-green-600 dark:text-green-400">
+          <p className="text-sm bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] font-medium inline-block px-4 py-1 rounded-full shadow-sm">
             Maximum {maxRank} players reached
           </p>
         </div>

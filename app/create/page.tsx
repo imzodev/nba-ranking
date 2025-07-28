@@ -98,7 +98,7 @@ export default function CreateRankingPage() {
         },
         body: JSON.stringify({
           email: submission.email,
-          rankingType: submission.rankingType,
+          rankingType: submission.ranking_type,
           rankings: submission.rankings.map(r => ({
             player_id: r.playerId,
             rank: r.rank,
@@ -123,11 +123,13 @@ export default function CreateRankingPage() {
   
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Create Your NBA Player Ranking</h1>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
+          <span className="text-[#17408B] dark:text-[#FDBB30]">Create</span> Your NBA Player Ranking
+        </h1>
         
         {submissionSuccess ? (
-          <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg mb-8">
+          <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg mb-8 border border-green-200 dark:border-green-800 shadow-md">
             <h2 className="text-xl font-semibold text-green-800 dark:text-green-200 mb-2">Thank You!</h2>
             <p className="text-green-700 dark:text-green-300 mb-4">
               Your ranking has been successfully submitted and will be included in the next aggregation.
@@ -137,7 +139,7 @@ export default function CreateRankingPage() {
                 setSubmissionSuccess(false);
                 setRankingType(RANKING_TYPES[1]); // Reset to Top 25
               }}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors"
+              className="bg-[#17408B] hover:bg-[#17408B]/90 text-white px-6 py-3 rounded-md transition-all hover:shadow-lg flex items-center justify-center gap-2"
             >
               Create Another Ranking
             </button>
@@ -146,8 +148,11 @@ export default function CreateRankingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left column: Player selection */}
             <div className="lg:col-span-2">
-              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Select Players</h2>
+              <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 border border-gray-100 dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <span className="inline-block w-1 h-6 bg-[#C9082A] rounded-full"></span>
+                  Select Players
+                </h2>
                 <PlayerGrid 
                   players={Array.isArray(players) ? players.filter(player => !selectedPlayers.some(p => p.id === player.id)) : []}
                   onPlayerClick={handleAddPlayer}
@@ -157,8 +162,11 @@ export default function CreateRankingPage() {
             
             {/* Right column: Ranking creation */}
             <div className="lg:col-span-1">
-              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8 sticky top-24">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Your Ranking</h2>
+              <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 sticky top-24 border border-gray-100 dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <span className="inline-block w-1 h-6 bg-[#FDBB30] rounded-full"></span>
+                  Your Ranking
+                </h2>
                 
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -179,7 +187,7 @@ export default function CreateRankingPage() {
                 
                 {selectedPlayers.length > 0 && (
                   <div className="mt-8">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Submit Your Ranking</h3>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">Submit Your Ranking</h3>
                     <SubmissionForm
                       players={selectedPlayers}
                       rankingType={rankingType}

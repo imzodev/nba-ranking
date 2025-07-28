@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
 import PlayerCard from '@/components/player/PlayerCard';
-import { RANKING_TYPE_LABELS } from '@/lib/utils/constants';
+import { RANKING_TYPE_LABELS, RANKING_TYPES } from '@/lib/utils/constants';
 import type { Player } from '@/lib/types/Player';
 import type { AggregatedRanking } from '@/lib/types/Ranking';
 
 export default function RankingsPage() {
   const params = useParams();
-  const rankingType = Number(params.type) || 25; // Default to 25 if not specified
+  const rankingType = Number(params.type) || 25 as const; // Default to 25 if not specified
   
   const [rankings, setRankings] = useState<AggregatedRanking[]>([]);
   const [players, setPlayers] = useState<Record<string, Player>>({});
@@ -71,14 +71,14 @@ export default function RankingsPage() {
   
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            NBA Ultimate {RANKING_TYPE_LABELS[rankingType]}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 border-b border-gray-200 dark:border-gray-700 pb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+            <span className="text-[#17408B] dark:text-[#FDBB30]">NBA</span> Ultimate {RANKING_TYPES.includes(rankingType) ? RANKING_TYPE_LABELS[rankingType as keyof typeof RANKING_TYPE_LABELS] : `Top ${rankingType}`}
           </h1>
           
           {lastUpdated && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 md:mt-0">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 md:mt-0 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
               Last updated: {lastUpdated}
             </p>
           )}
@@ -86,27 +86,27 @@ export default function RankingsPage() {
         
         {loading ? (
           <div className="flex justify-center items-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-nba-blue"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#17408B] dark:border-[#FDBB30]"></div>
           </div>
         ) : error ? (
-          <div className="bg-red-50 dark:bg-red-900/20 p-6 rounded-lg">
+          <div className="bg-red-50 dark:bg-red-900/20 p-6 rounded-lg border border-red-200 dark:border-red-800">
             <p className="text-red-700 dark:text-red-300">{error}</p>
           </div>
         ) : rankings.length === 0 ? (
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg">
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg border border-yellow-200 dark:border-yellow-800">
             <p className="text-yellow-700 dark:text-yellow-300">
               No rankings available yet. Be the first to submit your ranking!
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {rankings.map((ranking) => {
               const player = players[ranking.player_id];
               if (!player) return null;
               
               return (
                 <div key={ranking.player_id} className="relative">
-                  <div className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-nba-blue text-white flex items-center justify-center font-bold shadow-lg z-10">
+                  <div className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] flex items-center justify-center font-bold shadow-lg z-10 border-2 border-white dark:border-gray-800">
                     {ranking.rank}
                   </div>
                   <PlayerCard

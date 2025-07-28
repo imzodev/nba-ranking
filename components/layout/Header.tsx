@@ -19,7 +19,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-sm">
+    <header className="bg-white dark:bg-gray-900 shadow-md border-b border-gray-200 dark:border-gray-800">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
@@ -32,7 +32,10 @@ export default function Header() {
                 priority
               />
             </div>
-            <span className="font-bold text-xl text-nba-blue dark:text-white">NBA Rankings</span>
+            <div className="flex flex-col">
+              <span className="font-bold text-xl text-[#17408B] dark:text-white leading-none">NBA</span>
+              <span className="font-bold text-xl text-[#C9082A] dark:text-[#FDBB30] leading-none">RANKINGS</span>
+            </div>
           </Link>
         </div>
         
@@ -52,7 +55,7 @@ export default function Header() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 hover:text-nba-red dark:hover:text-nba-accent transition-colors"
+              className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 hover:text-[#C9082A] dark:hover:text-[#FDBB30] transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-[#C9082A] dark:after:bg-[#FDBB30] after:transition-all"
             >
               {item.name}
             </Link>
