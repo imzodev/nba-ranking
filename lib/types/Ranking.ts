@@ -1,0 +1,27 @@
+import { Player } from './Player';
+import { User } from './User';
+
+export interface UserRanking {
+  id: string;
+  user_id: string;
+  player_id: string;
+  ranking_type: number; // 10, 25, 50, or 100
+  rank: number;
+  submission_date: string;
+  created_at: string;
+  updated_at: string;
+  
+  // Joined data
+  players?: Player;
+  user?: User;
+}
+
+export interface RankingSubmission {
+  email: string;
+  name: string;
+  rankings: Array<{
+    player_id: string;
+    rank: number;
+  }>;
+  ranking_type: number; // 10, 25, 50, or 100
+}
