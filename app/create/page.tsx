@@ -22,11 +22,13 @@ export default function CreateRankingPage() {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const response = await fetch('/api/players');
+        // Fetch players with a limit of 10 (or any other number you prefer)
+        const response = await fetch('/api/players?limit=10');
         if (!response.ok) {
           throw new Error('Failed to fetch players');
         }
         const data = await response.json();
+        // The API now returns the players array directly
         setPlayers(data);
       } catch (error) {
         console.error('Error fetching players:', error);

@@ -18,6 +18,11 @@ This is the **living development document** for building the ultimate NBA wisdom
 - Environment fully configured
 - Basic infrastructure ready
 
+🚧 **Phase 2 In Progress**: Core Features
+- API endpoints for players implemented with limit parameter
+- Next.js image configuration updated to support Wikimedia images
+- Player service updated to support filtering and limiting results
+
 ---
 ## 🎯 Ranking System Design
 
@@ -101,26 +106,27 @@ interface RankingDisplayProps {
 - [x] Environment configuration
 
 ### Phase 2: Core Features 🚧 IN PROGRESS
+- [x] **Player API System**
+  - [x] Player retrieval with limit parameter
+  - [x] Player filtering by position and search query
+  - [x] Image hosting configuration for Wikimedia sources
+
 - [ ] **Vote Collection System**
-  - [ ] Session-based voting (no accounts needed)
-  - [ ] Drag-and-drop ranking interface
-  - [ ] Real-time vote storage
-  - [ ] Validation (exactly 25 players)
+  - [ ] IP-based voting (no accounts needed)
+  - [ ] Validation (exactly 10, 25, 50, or 100 players)
 
 - [ ] **Ranking Algorithm**
   - [ ] Statistical aggregation methods
   - [ ] Outlier detection and handling
   - [ ] Confidence interval calculation
-  - [ ] Real-time ranking updates
-
-- [ ] **Database Schema Updates**
-  - [ ] Votes table for user rankings
-  - [ ] Sessions table for tracking
-  - [ ] Aggregated rankings table
-  - [ ] Real-time subscription setup
 
 ### Phase 3: Frontend Components 🎯 NEXT
+- [x] **Player Display**
+  - [x] Basic player cards with images
+  - [x] Player grid component
+
 - [ ] **Ranking Interface**
+  - [x] Player selection functionality
   - [ ] Draggable player cards
   - [ ] 25 ranking slots
   - [ ] Visual feedback and animations
@@ -160,10 +166,11 @@ interface RankingDisplayProps {
 ## 🛠️ Implementation Plan
 
 ### Week 1: Core Infrastructure
+- [x] Set up player data extraction and storage
+- [x] Create player retrieval API with filtering and limits
+- [x] Configure image hosting for external sources
 - [ ] Set up votes table schema
 - [ ] Create ranking collection API
-- [ ] Build basic ranking interface
-- [ ] Implement statistical aggregation
 
 ### Week 2: Frontend Development
 - [ ] Create drag-and-drop components
@@ -230,9 +237,11 @@ const channel = supabase
 This isn't just another ranking app - it's a **living, breathing** representation of basketball fan collective intelligence. Every vote contributes to creating the most accurate NBA top 25 ever assembled.
 
 **Next Steps:**
-1. Set up your environment
-2. Run the population script
-3. Start building the ranking interface
-4. Deploy and watch the wisdom emerge
+1. ✅ Set up your environment
+2. ✅ Run the population script
+3. 🚧 Complete the player selection and ranking interface
+4. ⏱️ Implement the ranking submission system
+5. ⏱️ Build the ranking aggregation algorithm
+6. ⏱️ Deploy and watch the wisdom emerge
 
 *Powered by Wikipedia, Supabase, and the collective wisdom of basketball fans worldwide.*
