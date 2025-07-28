@@ -20,8 +20,16 @@ export interface RankingSubmission {
   email: string;
   name: string;
   rankings: Array<{
-    player_id: string;
+    playerId: string;
     rank: number;
   }>;
   ranking_type: number; // 10, 25, 50, or 100
+}
+
+export interface AggregatedRanking {
+  player_id: string;
+  rank: number;
+  points: number;
+  ranking_type: number;
+  aggregation_date: string;
 }

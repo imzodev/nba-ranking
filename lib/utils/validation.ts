@@ -66,10 +66,10 @@ export const validateRankingSubmission = (submission: RankingSubmission): {
     // Check for duplicate players
     const playerIds = new Set<string>();
     submission.rankings.forEach(ranking => {
-      if (playerIds.has(ranking.player_id)) {
+      if (playerIds.has(ranking.playerId)) {
         errors.push('Rankings contain duplicate players');
       }
-      playerIds.add(ranking.player_id);
+      playerIds.add(ranking.playerId);
     });
     
     // Check for valid ranks

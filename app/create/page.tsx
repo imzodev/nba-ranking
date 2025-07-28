@@ -1,0 +1,196 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import MainLayout from '@/components/layout/MainLayout';
+import PlayerGrid from '@/components/player/PlayerGrid';
+import RankingList from '@/components/ranking/RankingList';
+import RankingTypeSelector from '@/components/ranking/RankingTypeSelector';
+import SubmissionForm from '@/components/ranking/SubmissionForm';
+import { RANKING_TYPES } from '@/lib/utils/constants';
+import type { Player } from '@/lib/types/Player';
+import type { RankingSubmission } from '@/lib/types/Ranking';
+
+export default function CreateRankingPage() {
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
+  const [rankingType, setRankingType] = useState<number>(RANKING_TYPES[1]); // Default to Top 25
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submissionSuccess, setSubmissionSuccess] = useState<boolean>(false);
+  const [submissionError, setSubmissionError] = useState<string>('');
+  
+  // Fetch players from API
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await fetch('/api/players');
+        if (!response.ok) {
+          throw new Error('Failed to fetch players');
+        }
+        const data = await response.json();
+        setPlayers(data);
+      } catch (error) {
+        console.error('Error fetching players:', error);
+      }
+    };
+    
+    fetchPlayers();
+  }, []);
+  
+  const handleAddPlayer = (player: Player) => {
+    // Check if player is already in the list
+    if (selectedPlayers.some(p => p.id === player.id)) {
+      return;
+    }
+    
+    // Check if we've reached the maximum number of players for this ranking type
+    if (selectedPlayers.length >= rankingType) {
+      return;
+    }
+    
+    setSelectedPlayers([...selectedPlayers, player]);
+  };
+  
+  const handleRemovePlayer = (playerId: string) => {
+    setSelectedPlayers(selectedPlayers.filter(p => p.id !== playerId));
+  };
+  
+  const handleReorderPlayers = (reorderedPlayers: Player[]) => {
+    setSelectedPlayers(reorderedPlayers);
+  };
+  
+  const handleRankingTypeChange = (type: number) => {
+    setRankingType(type);
+    
+    // If the new ranking type is smaller than the current selection, trim the list
+    if (selectedPlayers.length > type) {
+      setSelectedPlayers(selectedPlayers.slice(0, type));
+    }
+  };
+  
+  const handleSubmitRanking = async (submission: RankingSubmission) => {
+    setIsSubmitting(true);
+    setSubmissionError('');
+    
+    try {
+      // First, create or update the user
+      const userResponse = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: submission.email,
+          name: submission.name,
+        }),
+      });
+      
+      if (!userResponse.ok) {
+        throw new Error('Failed to create user');
+      }
+      
+      // Then, submit the ranking
+      const rankingResponse = await fetch('/api/rankings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: submission.email,
+          rankingType: submission.rankingType,
+          rankings: submission.rankings.map(r => ({
+            player_id: r.playerId,
+            rank: r.rank,
+          })),
+        }),
+      });
+      
+      if (!rankingResponse.ok) {
+        throw new Error('Failed to submit ranking');
+      }
+      
+      setSubmissionSuccess(true);
+      // Reset the form
+      setSelectedPlayers([]);
+    } catch (error) {
+      console.error('Error submitting ranking:', error);
+      setSubmissionError('Failed to submit ranking. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  return (
+    <MainLayout>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Create Your NBA Player Ranking</h1>
+        
+        {submissionSuccess ? (
+          <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg mb-8">
+            <h2 className="text-xl font-semibold text-green-800 dark:text-green-200 mb-2">Thank You!</h2>
+            <p className="text-green-700 dark:text-green-300 mb-4">
+              Your ranking has been successfully submitted and will be included in the next aggregation.
+            </p>
+            <button
+              onClick={() => {
+                setSubmissionSuccess(false);
+                setRankingType(RANKING_TYPES[1]); // Reset to Top 25
+              }}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors"
+            >
+              Create Another Ranking
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left column: Player selection */}
+            <div className="lg:col-span-2">
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Select Players</h2>
+                <PlayerGrid 
+                  players={Array.isArray(players) ? players.filter(player => !selectedPlayers.some(p => p.id === player.id)) : []}
+                  onPlayerClick={handleAddPlayer}
+                />
+              </div>
+            </div>
+            
+            {/* Right column: Ranking creation */}
+            <div className="lg:col-span-1">
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8 sticky top-24">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Your Ranking</h2>
+                
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Ranking Type
+                  </label>
+                  <RankingTypeSelector
+                    selectedType={rankingType}
+                    onChange={handleRankingTypeChange}
+                  />
+                </div>
+                
+                <RankingList
+                  players={selectedPlayers}
+                  onReorder={handleReorderPlayers}
+                  onRemovePlayer={handleRemovePlayer}
+                  maxRank={rankingType}
+                />
+                
+                {selectedPlayers.length > 0 && (
+                  <div className="mt-8">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Submit Your Ranking</h3>
+                    <SubmissionForm
+                      players={selectedPlayers}
+                      rankingType={rankingType}
+                      onSubmit={handleSubmitRanking}
+                      isSubmitting={isSubmitting}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </MainLayout>
+  );
+}
