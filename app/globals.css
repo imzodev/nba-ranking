@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Define custom dark mode variant for Tailwind CSS v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -21,13 +24,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --card-bg: #1a1a1a;
-    --border-color: #333333;
-  }
+/* Dark mode variables */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --card-bg: #1a1a1a;
+  --border-color: #333333;
 }
 
 body {

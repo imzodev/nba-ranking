@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import DarkModeToggle from '../ui/DarkModeToggle';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -57,6 +58,10 @@ export default function Header() {
             </Link>
           ))}
         </div>
+        
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <DarkModeToggle />
+        </div>
       </nav>
       
       {/* Mobile menu */}
@@ -100,6 +105,12 @@ export default function Header() {
                     {item.name}
                   </Link>
                 ))}
+                <div className="mt-4 px-3 py-2">
+                  <div className="flex items-center">
+                    <span className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 mr-3">Theme</span>
+                    <DarkModeToggle />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
