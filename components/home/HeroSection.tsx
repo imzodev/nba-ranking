@@ -1,6 +1,31 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import { useState, useEffect } from "react";
 
 export default function HeroSection() {
+  // Define the player images to cycle through
+  const playerImages = [
+    "/players/michael.png",
+    "/players/kobe.png",
+    "/players/lebron.png",
+    "/players/stephen.png",
+    "/players/kevin.png"
+  ];
+  
+  // State to track the current player image index
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  
+  // Effect to cycle through player images every 5 seconds
+  useEffect(() => {    
+    const intervalId = setInterval(() => {
+      setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % playerImages.length);
+    }, 5000);
+    
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
   return (
     <section className="relative bg-gradient-to-br from-[#17408B] via-[#17408B]/90 to-[#C9082A]/80 text-white min-h-[90vh] flex items-center">
       {/* Background pattern */}
@@ -35,14 +60,27 @@ export default function HeroSection() {
           </div>
           <div className="md:w-2/5 relative mt-12 md:mt-0">
             <div className="relative w-72 h-72 md:w-80 md:h-80 mx-auto">
-              <div className="absolute inset-0 bg-[#17408B] rounded-full opacity-20 animate-pulse"></div>
-              <div className="absolute inset-4 bg-[#C9082A] rounded-full opacity-30 animate-pulse" style={{animationDelay: '300ms'}}></div>
-              <div className="absolute inset-8 bg-[#FDBB30] rounded-full opacity-40 animate-pulse" style={{animationDelay: '600ms'}}></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 267.1 305.5" className="w-40 h-40 drop-shadow-2xl">
-                  <path fill="#fff" d="M266.1 39.3c-.3-2.9-2.3-5.2-5.1-5.9l-97.1-22.6c-2.5-.6-5.2.4-6.7 2.5-1.5 2.1-1.5 5 .1 7.1 1.6 2 4.3 2.9 6.8 2.2l75.9-17.6c-2.7 3.3-5.6 6.5-8.5 9.6-21.9 23-54.9 41.6-93.1 52.4-38.3-10.8-71.2-29.4-93.1-52.4-3-3.1-5.8-6.3-8.5-9.6l75.9 17.6c2.5.6 5.2-.2 6.8-2.2 1.6-2 1.6-4.9.1-7.1-1.5-2.1-4.2-3.1-6.7-2.5L15.1 33.4c-2.8.7-4.8 3-5.1 5.9-.3 2.9 1.2 5.7 3.7 7 1.1.6 2.2 1.2 3.3 1.7 1.3.7 2.7 1.4 4 2.1 1.9 1 3.8 2 5.8 3 .8.4 1.6.8 2.3 1.2 1.3.6 2.5 1.3 3.8 1.9.8.4 1.7.8 2.5 1.2 1.3.6 2.7 1.3 4 1.9.8.4 1.7.8 2.5 1.1 1.4.6 2.8 1.3 4.2 1.9.8.4 1.6.7 2.4 1.1 1.5.7 3.1 1.3 4.6 2 .7.3 1.4.6 2.1.9 2 .8 4 1.7 6 2.5.2.1.4.2.7.3 2.1.8 4.3 1.7 6.5 2.5.7.3 1.5.5 2.2.8 1.7.6 3.5 1.2 5.2 1.8.8.3 1.7.6 2.5.9 1.7.6 3.4 1.1 5.1 1.7.8.3 1.7.5 2.5.8 1.7.5 3.5 1.1 5.3 1.6.8.2 1.6.5 2.4.7 1.9.6 3.9 1.1 5.8 1.6.7.2 1.3.4 2 .5 2.3.6 4.6 1.2 6.9 1.7.2.1.5.1.7.2 2.4.6 4.9 1.1 7.3 1.6.7.1 1.4.3 2.1.4 2 .4 4 .8 6 1.1.8.1 1.6.3 2.4.4 2 .3 4 .7 6 1 .8.1 1.5.2 2.3.3 2.2.3 4.3.6 6.5.8.6.1 1.3.1 1.9.2 2.5.3 5.1.5 7.6.7.5 0 .9.1 1.4.1 2.7.2 5.4.3 8.1.5.4 0 .9 0 1.3.1 2.8.1 5.7.2 8.5.2s5.7-.1 8.5-.2c.4 0 .9 0 1.3-.1 2.7-.1 5.4-.3 8.1-.5.5 0 .9-.1 1.4-.1 2.6-.2 5.1-.4 7.6-.7.6-.1 1.3-.1 1.9-.2 2.2-.3 4.4-.5 6.5-.8.8-.1 1.5-.2 2.3-.3 2-.3 4-.6 6-1 .8-.1 1.6-.3 2.4-.4 2-.4 4-.7 6-1.1.7-.1 1.4-.3 2.1-.4 2.5-.5 4.9-1 7.3-1.6.2-.1.5-.1.7-.2 2.3-.6 4.6-1.1 6.9-1.7.7-.2 1.3-.4 2-.5 2-.5 3.9-1 5.8-1.6.8-.2 1.6-.5 2.4-.7 1.8-.5 3.5-1 5.3-1.6.8-.3 1.7-.5 2.5-.8 1.7-.5 3.4-1.1 5.1-1.7.8-.3 1.7-.6 2.5-.9 1.8-.6 3.5-1.2 5.2-1.8.7-.3 1.5-.5 2.2-.8 2.2-.8 4.4-1.7 6.5-2.5.2-.1.4-.2.7-.3 2-.8 4-1.6 6-2.5.7-.3 1.4-.6 2.1-.9 1.6-.7 3.1-1.3 4.6-2 .8-.3 1.6-.7 2.4-1.1 1.4-.6 2.8-1.3 4.2-1.9.8-.4 1.7-.7 2.5-1.1 1.3-.6 2.7-1.3 4-1.9.8-.4 1.7-.8 2.5-1.2 1.3-.6 2.5-1.3 3.8-1.9.8-.4 1.6-.8 2.3-1.2 2-1 3.9-2 5.8-3 1.3-.7 2.7-1.4 4-2.1 1.1-.6 2.2-1.2 3.3-1.7 2.5-1.3 4-4.1 3.7-7z"/>
-                  <path fill="#fff" d="M133.5 179.9c-40.7-11.5-74.7-31.3-97.4-56.2-1.7-1.9-4.3-2.5-6.6-1.5s-3.8 3.4-3.8 5.9v118.3c0 27.8 46.7 59.1 108.3 59.1s108.3-31.3 108.3-59.1V128.1c0-2.5-1.5-4.9-3.8-5.9s-4.9-.4-6.6 1.5c-22.7 24.9-56.7 44.7-97.4 56.2-1 .3-2 .3-3 0z"/>
-                </svg>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#17408B] to-[#C9082A] rounded-full opacity-30 animate-pulse shadow-lg"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-[#FDBB30]/30 shadow-xl"></div>
+              <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                {/* Player images */}
+                {playerImages.map((src, index) => (
+                  <div 
+                    key={src}
+                    className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${index === currentPlayerIndex ? 'opacity-100' : 'opacity-0'}`}
+                  >
+                    <div className="relative w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl">
+                      <Image 
+                        src={src} 
+                        alt={`NBA Player ${index + 1}`} 
+                        fill
+                        sizes="(max-width: 768px) 256px, 288px"
+                        className="object-cover object-center" 
+                        priority={index === 0}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

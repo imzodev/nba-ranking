@@ -23,9 +23,9 @@ export default function Header() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-            <div className="w-10 h-10 relative">
+            <div className="w-20 h-16 relative">
               <Image
-                src="/nba-logo.svg"
+                src="/nba-logo.png"
                 alt="NBA Logo"
                 fill
                 className="object-contain"
