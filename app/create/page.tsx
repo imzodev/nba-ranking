@@ -206,7 +206,7 @@ export default function CreateRankingPage() {
               <PlayerDetailsPanel player={drawerPlayer} />
             </div>
             {/* Center column: Player selection */}
-            <div className="col-span-1">
+            <div className="order-2 lg:order-1 col-span-1">
               <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 border border-gray-100 dark:border-gray-700">
                 <div className="flex flex-col mb-6">
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
@@ -233,7 +233,7 @@ export default function CreateRankingPage() {
             </div>
             
             {/* Right column: Ranking creation */}
-            <div className="lg:col-span-1">
+            <div className="order-1 lg:order-2 lg:col-span-1">
               <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 sticky top-4 border border-gray-100 dark:border-gray-700">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <span className="inline-block w-1 h-6 bg-[#FDBB30] rounded-full"></span>
