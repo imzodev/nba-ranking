@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
+import { Eye } from 'lucide-react';
 import type { Player } from '@/lib/types/Player';
 
 interface PlayerCardProps {
@@ -45,7 +46,7 @@ export default function PlayerCard({
                  h-full flex flex-col`}
       onClick={onSelect}
     >
-      <div className="flex items-center p-4 flex-grow">
+      <div className="flex-1 flex items-center gap-4 p-4">
         {rank && (
           <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] rounded-full mr-3 font-bold shadow-sm">
             {rank}
@@ -67,7 +68,7 @@ export default function PlayerCard({
           )}
         </div>
         
-        <div className="flex-grow min-w-0 max-w-full">
+        <div className="flex flex-col justify-center min-h-[56px] flex-grow min-w-0 max-w-full flex-shrink">
           <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white mb-0.5" style={{ wordBreak: 'break-word' }}>{player.name}</h3>
           <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
             {player.position || 'N/A'} • {player.team || 'N/A'}
@@ -76,13 +77,14 @@ export default function PlayerCard({
         
         {onPlayerDetails && (
           <button
-            className="ml-auto px-3 py-1 rounded bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] text-xs font-semibold shadow hover:bg-[#163370] dark:hover:bg-[#FFD700] transition-colors"
+            className="ml-auto w-24 flex-shrink-0 flex items-center justify-center px-3 py-1 rounded bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] text-xs font-semibold shadow hover:bg-[#163370] dark:hover:bg-[#FFD700] transition-colors"
             onClick={e => {
               e.stopPropagation();
               onPlayerDetails(player);
             }}
           >
-            View Details
+            <Eye className="w-5 h-5" aria-hidden="true" /> &nbsp;Details
+            <span className="sr-only">View Details</span>
           </button>
         )}
       </div>

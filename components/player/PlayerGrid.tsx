@@ -115,7 +115,7 @@ export default function PlayerGrid({
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#17408B] dark:border-[#FDBB30]"></div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {currentPlayers.map((player) => (
             <PlayerCard
               key={player.id}
@@ -161,7 +161,7 @@ export default function PlayerGrid({
                 onClick={() => paginate(i + 1)}
                 className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium
                   ${currentPage === i + 1
-                    ? 'z-10 bg-nba-blue dark:bg-nba-blue border-nba-blue text-white'
+                    ? 'z-10 bg-slate-200 dark:bg-slate-600 border-slate-400 dark:border-slate-600 text-gray-900 dark:text-slate-50 font-black'
                     : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
               >

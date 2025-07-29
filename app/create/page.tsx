@@ -200,7 +200,7 @@ export default function CreateRankingPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(300px,340px)_1fr_minmax(320px,370px)] gap-6 w-full">
+          <div className="grid grid-cols-1 lg:[grid-template-columns:minmax(300px,340px)_1fr_minmax(320px,370px)] gap-6 w-full">
             {/* Left column: Player details (desktop only) */}
             <div className="hidden lg:block h-full sticky top-24 self-start">
               <PlayerDetailsPanel player={drawerPlayer} />
