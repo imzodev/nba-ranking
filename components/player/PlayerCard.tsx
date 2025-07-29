@@ -21,6 +21,12 @@ export default function PlayerCard({
   isDragging = false,
   showDetails = false,
 }: PlayerCardProps) {
+  // Debugging logs
+  console.log('PlayerCard player:', player);
+  console.log('PlayerCard player.highlights:', player && player.highlights);
+  if (player && player.highlights) {
+    console.log('highlights type:', typeof player.highlights, 'length:', Array.isArray(player.highlights) ? player.highlights.length : 'n/a');
+  }
   const [isExpanded, setIsExpanded] = useState(false);
   
   const toggleDetails = () => {
@@ -87,37 +93,26 @@ export default function PlayerCard({
       
       {isExpanded && showDetails && (
         <div className="px-4 pb-4 pt-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            {points !== undefined && (
-              <div className="col-span-2 mb-1">
-                <p className="text-gray-500 dark:text-gray-400">Ranking Points</p>
-                <p className="font-medium text-[#17408B] dark:text-[#FDBB30]">{points.toFixed(1)}</p>
-              </div>
+          <div className="mb-1">
+            <p className="text-gray-500 dark:text-gray-400 font-semibold mb-2">Career Highlights</p>
+            {Array.isArray(player.highlights) && player.highlights.length > 0 ? (
+              <ul className="list-none pl-0 space-y-1 max-h-52 overflow-y-auto pr-1">
+                {player.highlights.map((hl, idx) => (
+                  typeof hl === 'string' ? (
+                    <li key={idx} className="flex items-start gap-2 text-sm text-gray-900 dark:text-white">
+                      <span className="mt-1 text-[#17408B] dark:text-[#FDBB30]">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                      <span>{hl.replace(/^\*\s*/, '')}</span>
+                    </li>
+                  ) : null
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-400 italic">No highlights available.</p>
             )}
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">PPG</p>
-              <p className="font-medium">{player.ppg || 'N/A'}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">RPG</p>
-              <p className="font-medium">{player.rpg || 'N/A'}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">APG</p>
-              <p className="font-medium">{player.apg || 'N/A'}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">Championships</p>
-              <p className="font-medium">{player.championships || '0'}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">MVPs</p>
-              <p className="font-medium">{player.mvps || '0'}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">All-Star</p>
-              <p className="font-medium">{player.all_star || '0'}</p>
-            </div>
           </div>
         </div>
       )}

@@ -16,7 +16,7 @@ export class PlayerService {
   async getAllPlayers(limit?: number): Promise<Player[]> {
     let query = this.supabase
       .from('players')
-      .select('id, name, full_name, position, team, image_url')
+      .select('id, name, full_name, position, team, image_url, highlights')
       .order('name');
     
     if (limit) {
