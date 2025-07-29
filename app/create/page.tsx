@@ -216,33 +216,11 @@ export default function CreateRankingPage() {
 
                   
                   <div className="w-full">
-                    <div className="relative">
-                      <input
-                        type="text"
-                        className="w-full pl-10 pr-10 py-3 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#17408B] dark:focus:ring-[#FDBB30] focus:border-[#17408B] dark:focus:border-[#FDBB30] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all shadow-sm"
-                        placeholder="Search by player name or team..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                      />
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 dark:text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                      </div>
-                      {searchQuery && (
-                        <button
-                          className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                          onClick={() => setSearchQuery('')}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                          </svg>
-                        </button>
-                      )}
+                    <div className="w-full">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-1">
+                        {filteredPlayers.length} player{filteredPlayers.length !== 1 ? 's' : ''} available
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-1">
-                      {filteredPlayers.length} player{filteredPlayers.length !== 1 ? 's' : ''} available
-                    </p>
                   </div>
                 </div>
                 
@@ -250,10 +228,8 @@ export default function CreateRankingPage() {
                   players={Array.isArray(players) ? players.filter(player => !selectedPlayers.some(p => p.id === player.id)) : []}
                   onSelectPlayer={handleAddPlayer}
                   onPlayerDetails={handlePlayerDetails}
-                  searchQuery={searchQuery}
-                  showSearch={false}
-                />
-              </div>
+                  showSearch={true}
+                />              </div>
             </div>
             
             {/* Right column: Ranking creation */}
