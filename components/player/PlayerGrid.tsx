@@ -115,7 +115,7 @@ export default function PlayerGrid({
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#17408B] dark:border-[#FDBB30]"></div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2 gap-4">
           {currentPlayers.map((player) => (
             <PlayerCard
               key={player.id}
