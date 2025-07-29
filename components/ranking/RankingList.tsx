@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DndContext,
   closestCenter,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   DragEndEvent,
@@ -31,6 +32,18 @@ interface RankingListProps {
   maxRank?: number;
 }
 
+// Hook to detect if the device is touch-enabled
+function useIsTouchDevice() {
+  const [isTouch, setIsTouch] = useState(false);
+  useEffect(() => {
+    setIsTouch(
+      typeof window !== 'undefined' &&
+      ('ontouchstart' in window || navigator.maxTouchPoints > 0)
+    );
+  }, []);
+  return isTouch;
+}
+
 export default function RankingList({
   players,
   onReorder,
@@ -38,14 +51,22 @@ export default function RankingList({
   maxRank = 25,
 }: RankingListProps) {
   const [isDragging, setIsDragging] = useState(false);
-  
+  const isTouch = useIsTouchDevice();
+
   // Configure sensors for drag detection
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8, // 8px movement required before drag starts
-      },
-    }),
+    isTouch
+      ? useSensor(TouchSensor, {
+          activationConstraint: {
+            delay: 150, // Optional: slight delay for mobile
+            tolerance: 5,
+          },
+        })
+      : useSensor(PointerSensor, {
+          activationConstraint: {
+            distance: 8,
+          },
+        }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })

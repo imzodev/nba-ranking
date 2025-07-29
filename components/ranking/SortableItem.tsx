@@ -28,7 +28,7 @@ export function SortableItem({ id, player, rank, onRemove }: SortableItemProps) 
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="relative touch-manipulation">
+    <div ref={setNodeRef} style={{ ...style, touchAction: 'none' }} {...attributes} {...listeners} className={`relative touch-manipulation md:cursor-grab${isDragging ? ' md:cursor-grabbing' : ''}`}>
       <div className="group">
         <PlayerCard
           player={player}
