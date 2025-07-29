@@ -3,6 +3,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import PlayerGrid from '@/components/player/PlayerGrid';
+import PlayerDrawer from '@/components/player/PlayerDrawer';
+import PlayerDetailsPanel from '@/components/player/PlayerDetailsPanel';
 import RankingList from '@/components/ranking/RankingList';
 import RankingTypeSelector from '@/components/ranking/RankingTypeSelector';
 import SubmissionForm from '@/components/ranking/SubmissionForm';
@@ -11,6 +13,14 @@ import type { Player } from '@/lib/types/Player';
 import type { RankingSubmission } from '@/lib/types/Ranking';
 
 export default function CreateRankingPage() {
+  const [drawerPlayer, setDrawerPlayer] = useState<Player | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handlePlayerDetails = (player: Player) => {
+    setDrawerPlayer(player);
+    setDrawerOpen(true);
+  };
+
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
   const [rankingType, setRankingType] = useState<number>(RANKING_TYPES[1]); // Default to Top 25
@@ -140,7 +150,15 @@ export default function CreateRankingPage() {
   
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Mobile drawer only */}
+      <div className="block lg:hidden">
+        <PlayerDrawer
+          player={drawerPlayer}
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        />
+      </div>
+      <div className="w-full max-w-none px-2 sm:px-4 py-8">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-200 dark:border-gray-700 flex flex-col md:flex-row md:items-center gap-2">
           <div>
             <span className="text-[#17408B] dark:text-[#FDBB30] mr-2">Create</span> Your NBA Player Ranking
@@ -182,15 +200,20 @@ export default function CreateRankingPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left column: Player selection */}
-            <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(300px,340px)_1fr_minmax(320px,370px)] gap-6 w-full">
+            {/* Left column: Player details (desktop only) */}
+            <div className="hidden lg:block h-full sticky top-24 self-start">
+              <PlayerDetailsPanel player={drawerPlayer} />
+            </div>
+            {/* Center column: Player selection */}
+            <div className="col-span-1">
               <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 border border-gray-100 dark:border-gray-700">
                 <div className="flex flex-col mb-6">
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
                     <span className="inline-block w-1 h-6 bg-[#C9082A] rounded-full"></span>
                     Select Players
                   </h2>
+
                   
                   <div className="w-full">
                     <div className="relative">
@@ -225,7 +248,8 @@ export default function CreateRankingPage() {
                 
                 <PlayerGrid 
                   players={Array.isArray(players) ? players.filter(player => !selectedPlayers.some(p => p.id === player.id)) : []}
-                  onPlayerClick={handleAddPlayer}
+                  onSelectPlayer={handleAddPlayer}
+                  onPlayerDetails={handlePlayerDetails}
                   searchQuery={searchQuery}
                   showSearch={false}
                 />
@@ -234,7 +258,7 @@ export default function CreateRankingPage() {
             
             {/* Right column: Ranking creation */}
             <div className="lg:col-span-1">
-              <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 sticky top-24 border border-gray-100 dark:border-gray-700">
+              <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 sticky top-4 border border-gray-100 dark:border-gray-700">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <span className="inline-block w-1 h-6 bg-[#FDBB30] rounded-full"></span>
                   Your Ranking

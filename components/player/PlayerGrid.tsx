@@ -13,10 +13,22 @@ interface PlayerGridProps {
   showSearch?: boolean;
 }
 
+interface PlayerGridProps {
+  players: Player[];
+  onSelectPlayer?: (player: Player) => void;
+  onPlayerClick?: (player: Player) => void;
+  onPlayerDetails?: (player: Player) => void;
+  selectedPlayers?: Player[];
+  searchQuery?: string;
+  positionFilter?: string;
+  showSearch?: boolean;
+}
+
 export default function PlayerGrid({
   players,
   onSelectPlayer,
   onPlayerClick,
+  onPlayerDetails,
   selectedPlayers = [],
   searchQuery = '',
   positionFilter = '',
@@ -108,15 +120,11 @@ export default function PlayerGrid({
             <PlayerCard
               key={player.id}
               player={player}
-              onSelect={() => {
-                if (onPlayerClick) {
-                  onPlayerClick(player);
-                } else if (onSelectPlayer) {
-                  onSelectPlayer(player);
-                }
-              }}
+              onSelect={onSelectPlayer ? () => onSelectPlayer(player) : undefined}
               isSelected={isPlayerSelected(player)}
+              isDragging={false}
               showDetails={true}
+              onPlayerDetails={onPlayerDetails}
             />
           ))}
         </div>

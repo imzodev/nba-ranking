@@ -10,6 +10,7 @@ interface PlayerCardProps {
   isSelected?: boolean;
   isDragging?: boolean;
   showDetails?: boolean;
+  onPlayerDetails?: (player: Player) => void;
 }
 
 export default function PlayerCard({
@@ -20,6 +21,7 @@ export default function PlayerCard({
   isSelected = false,
   isDragging = false,
   showDetails = false,
+  onPlayerDetails,
 }: PlayerCardProps) {
   // Debugging logs
   console.log('PlayerCard player:', player);
@@ -72,21 +74,15 @@ export default function PlayerCard({
           </p>
         </div>
         
-        {showDetails && (
-          <button 
-            onClick={(e) => {
+        {onPlayerDetails && (
+          <button
+            className="ml-auto px-3 py-1 rounded bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] text-xs font-semibold shadow hover:bg-[#163370] dark:hover:bg-[#FFD700] transition-colors"
+            onClick={e => {
               e.stopPropagation();
-              toggleDetails();
+              onPlayerDetails(player);
             }}
-            className="ml-2 text-gray-500 hover:text-[#17408B] dark:hover:text-[#FDBB30] transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-              {isExpanded ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-              )}
-            </svg>
+            View Details
           </button>
         )}
       </div>
