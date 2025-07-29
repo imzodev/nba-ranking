@@ -46,17 +46,19 @@ export default function PlayerCard({
       onClick={onSelect}
     >
       {/* Drag indicator for desktop */}
-      <span className="absolute top-2 left-2 hidden md:inline-flex items-center gap-1 text-xs text-gray-400 pointer-events-none select-none z-10">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 20 20">
-          <circle cx="5" cy="6" r="1.5" />
-          <circle cx="5" cy="10" r="1.5" />
-          <circle cx="5" cy="14" r="1.5" />
-          <circle cx="11" cy="6" r="1.5" />
-          <circle cx="11" cy="10" r="1.5" />
-          <circle cx="11" cy="14" r="1.5" />
-        </svg>
-        Drag to reorder
-      </span>
+      {rank !== undefined && (
+        <span className="absolute top-2 left-2 hidden md:inline-flex items-center gap-1 text-xs text-gray-400 pointer-events-none select-none z-10">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 20 20">
+            <circle cx="5" cy="6" r="1.5" />
+            <circle cx="5" cy="10" r="1.5" />
+            <circle cx="5" cy="14" r="1.5" />
+            <circle cx="11" cy="6" r="1.5" />
+            <circle cx="11" cy="10" r="1.5" />
+            <circle cx="11" cy="14" r="1.5" />
+          </svg>
+          Drag to reorder
+        </span>
+      )}
       <div className="flex-1 flex items-center gap-4 p-5">
         {rank && (
           <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gradient-to-br from-[#17408B] to-[#17408B] text-white rounded-full font-bold shadow-sm text-sm">
