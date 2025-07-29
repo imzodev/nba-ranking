@@ -33,17 +33,18 @@ export default function PlayerCard({
     <div 
       className={`card relative bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden transition-all ${isSelected ? 'ring-2 ring-[#17408B] dark:ring-[#FDBB30]' : ''} 
                  ${isDragging ? 'opacity-50' : 'opacity-100'} 
-                 ${onSelect ? 'cursor-pointer hover:shadow-lg transform hover:-translate-y-1 transition-all' : ''}`}
+                 ${onSelect ? 'cursor-pointer hover:shadow-lg transform hover:-translate-y-1 transition-all' : ''}
+                 h-full flex flex-col`}
       onClick={onSelect}
     >
-      <div className="flex items-center p-3">
+      <div className="flex items-center p-4 flex-grow">
         {rank && (
           <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] rounded-full mr-3 font-bold shadow-sm">
             {rank}
           </div>
         )}
         
-        <div className="flex-shrink-0 w-12 h-12 relative rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 mr-3 border-2 border-gray-200 dark:border-gray-600">
+        <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 relative rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 mr-3 border-2 border-gray-200 dark:border-gray-600 shadow-md">
           {player.image_url ? (
             <Image
               src={player.image_url}
@@ -58,9 +59,9 @@ export default function PlayerCard({
           )}
         </div>
         
-        <div className="flex-grow min-w-0">
-          <h3 className="text-base font-semibold truncate text-gray-900 dark:text-white">{player.name}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+        <div className="flex-grow min-w-0 max-w-full">
+          <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white mb-0.5" style={{ wordBreak: 'break-word' }}>{player.name}</h3>
+          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
             {player.position || 'N/A'} • {player.team || 'N/A'}
           </p>
         </div>
@@ -85,7 +86,7 @@ export default function PlayerCard({
       </div>
       
       {isExpanded && showDetails && (
-        <div className="px-3 pb-3 pt-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+        <div className="px-4 pb-4 pt-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
           <div className="grid grid-cols-2 gap-2 text-sm">
             {points !== undefined && (
               <div className="col-span-2 mb-1">

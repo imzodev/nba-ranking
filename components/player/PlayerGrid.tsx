@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Player } from '@/lib/types/Player';
 import PlayerCard from './PlayerCard';
+import { Search } from 'lucide-react';
 
 interface PlayerGridProps {
   players: Player[];
@@ -9,6 +10,7 @@ interface PlayerGridProps {
   selectedPlayers?: Player[];
   searchQuery?: string;
   positionFilter?: string;
+  showSearch?: boolean;
 }
 
 export default function PlayerGrid({
@@ -18,15 +20,33 @@ export default function PlayerGrid({
   selectedPlayers = [],
   searchQuery = '',
   positionFilter = '',
+  showSearch = true,
 }: PlayerGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const playersPerPage = 12;
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
+  const [isLoading, setIsLoading] = useState(false);
+  const playersPerPage = 16;
+  
+  // Reset page when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [localSearchQuery]);
+  
+  // Simulate loading state when filtering
+  useEffect(() => {
+    if (localSearchQuery !== searchQuery) {
+      setIsLoading(true);
+      const timer = setTimeout(() => setIsLoading(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [localSearchQuery, searchQuery]);
   
   // Filter players based on search query and position filter
   const filteredPlayers = players.filter((player) => {
-    const matchesSearch = searchQuery === '' || 
-      player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (player.full_name && player.full_name.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch = localSearchQuery === '' || 
+      player.name.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
+      (player.full_name && player.full_name.toLowerCase().includes(localSearchQuery.toLowerCase())) ||
+      (player.team && player.team.toLowerCase().includes(localSearchQuery.toLowerCase()));
     
     const matchesPosition = positionFilter === '' || 
       (player.position && player.position.includes(positionFilter));
@@ -51,35 +71,71 @@ export default function PlayerGrid({
   };
 
   return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {currentPlayers.map((player) => (
-          <PlayerCard
-            key={player.id}
-            player={player}
-            onSelect={() => {
-              if (onPlayerClick) {
-                onPlayerClick(player);
-              } else if (onSelectPlayer) {
-                onSelectPlayer(player);
-              }
-            }}
-            isSelected={isPlayerSelected(player)}
-            showDetails={true}
-          />
-        ))}
-      </div>
+    <div className="space-y-6">
+      {showSearch && (
+        <div className="relative mb-6">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 dark:text-gray-400">
+              <Search size={18} />
+            </div>
+            <input
+              type="text"
+              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#17408B] dark:focus:ring-[#FDBB30] focus:border-[#17408B] dark:focus:border-[#FDBB30] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all"
+              placeholder="Search players by name or team..."
+              value={localSearchQuery}
+              onChange={(e) => setLocalSearchQuery(e.target.value)}
+            />
+            {localSearchQuery && (
+              <button
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                onClick={() => setLocalSearchQuery('')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#17408B] dark:border-[#FDBB30]"></div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4">
+          {currentPlayers.map((player) => (
+            <PlayerCard
+              key={player.id}
+              player={player}
+              onSelect={() => {
+                if (onPlayerClick) {
+                  onPlayerClick(player);
+                } else if (onSelectPlayer) {
+                  onSelectPlayer(player);
+                }
+              }}
+              isSelected={isPlayerSelected(player)}
+              showDetails={true}
+            />
+          ))}
+        </div>
+      )}
       
       {filteredPlayers.length === 0 && (
-        <div className="text-center py-8">
-          <p className="text-gray-500 dark:text-gray-400">No players found matching your criteria.</p>
+        <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <p className="text-gray-500 dark:text-gray-400 text-lg">No players found matching your criteria.</p>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Try adjusting your search terms.</p>
         </div>
       )}
       
       {/* Pagination */}
-      {totalPages > 1 && (
+      {totalPages > 1 && !isLoading && (
         <div className="flex justify-center mt-8">
-          <nav className="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+          <nav className="inline-flex rounded-md shadow-sm -space-x-px bg-white dark:bg-gray-800" aria-label="Pagination">
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
