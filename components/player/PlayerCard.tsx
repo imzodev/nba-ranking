@@ -83,8 +83,10 @@ export default function PlayerCard({
         
         <div className="flex items-center gap-2 ml-auto">
           {onPlayerDetails && (
+            // <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2 gap-4">
+
             <button
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#17408B] hover:bg-[#17408B] text-white text-sm font-medium shadow-sm transition-colors duration-200"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#17408B] hover:bg-[#17408B] text-white text-sm font-medium shadow-sm transition-colors duration-200"
               onClick={e => {
                 e.stopPropagation();
                 onPlayerDetails(player);
@@ -95,8 +97,53 @@ export default function PlayerCard({
             </button>
           )}
           
+          {showDetails && (
+            <button
+              className="flex lg:hidden items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition-colors duration-200"
+              onClick={e => {
+                e.stopPropagation();
+                toggleDetails();
+              }}
+            >
+              {isExpanded ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+            </button>
+          )}
         </div>
       </div>
+      
+      {isExpanded && showDetails && (
+        <div className="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-5">
+          <div className="mb-3">
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+              Career Highlights
+            </h4>
+            {Array.isArray(player.highlights) && player.highlights.length > 0 ? (
+              <div className="max-h-48 overflow-y-auto pr-2">
+                <ul className="space-y-2">
+                  {player.highlights.map((hl, idx) => (
+                    typeof hl === 'string' ? (
+                      <li key={idx} className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+                        <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-blue-500 mt-2" />
+                        <span className="leading-relaxed">
+                          {hl.replace(/^\*\s*/, '')}
+                        </span>
+                      </li>
+                    ) : null
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                No highlights available.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
