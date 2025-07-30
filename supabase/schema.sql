@@ -97,7 +97,6 @@ CREATE TABLE IF NOT EXISTS user_rankings (
 CREATE TABLE IF NOT EXISTS aggregated_rankings (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     player_id UUID NOT NULL REFERENCES players(id) ON DELETE CASCADE, -- Links to the player in this aggregated ranking
-    rank INTEGER NOT NULL CHECK (rank BETWEEN 1 AND 100), -- The player's position in the aggregated list (1 = best)
     ranking_type INTEGER NOT NULL, -- Indicates which list type: 10, 25, 50, or 100 players
     points INTEGER NOT NULL, -- Total points accumulated based on ranking positions (higher is better)
     average_rank DECIMAL(5,2) NOT NULL, -- Mean position across all user rankings (lower is better)
