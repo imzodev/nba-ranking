@@ -65,18 +65,18 @@ export class RankingService {
         .eq('submission_date', today);
     }
     
-    // Insert rankings
-    const rankingsToInsert = rankings.map(r => ({
+    // Insert a single row with rankings JSON
+    const rowToInsert = {
       user_id: user.id,
-      player_id: r.playerId,
-      rank: r.rank,
       ranking_type: rankingType,
-      submission_date: today
-    }));
-    
+      rankings: rankings,
+      submission_date: today,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
     const { error: rankingsError } = await this.supabase
       .from('user_rankings')
-      .insert(rankingsToInsert);
+      .insert([rowToInsert]);
     
     if (rankingsError) {
       return { success: false, error: rankingsError };
@@ -158,27 +158,19 @@ export class RankingService {
    * @param rankingType Type of ranking (10, 25, 50, or 100)
    * @returns Array of user rankings with player details
    */
-  async getUserRankings(email: string, rankingType: number): Promise<UserRanking[]> {
+  async getUserRankings(email: string, rankingType: number): Promise<{ playerId: string, rank: number }[]> {
     const user = await this.userService.getUserByEmail(email);
-    
-    if (!user) {
-      return [];
-    }
-    
+    if (!user) return [];
     const { data, error } = await this.supabase
       .from('user_rankings')
-      .select(`
-        *,
-        players:player_id (
-          id, name, full_name, position, team, image_url
-        )
-      `)
+      .select('rankings')
       .eq('user_id', user.id)
       .eq('ranking_type', rankingType)
-      .order('rank', { ascending: true });
-    
-    if (error) throw error;
-    return data as unknown as UserRanking[];
+      .order('submission_date', { ascending: false })
+      .limit(1)
+      .single();
+    if (error || !data) return [];
+    return data.rankings || [];
   }
   
   /**
@@ -187,43 +179,19 @@ export class RankingService {
    * @param rankingType Type of ranking (10, 25, 50, or 100)
    * @returns Array of user rankings with player details
    */
-  async getLatestUserRankings(email: string, rankingType: number): Promise<UserRanking[]> {
+  async getLatestUserRankings(email: string, rankingType: number): Promise<{ playerId: string, rank: number }[]> {
     const user = await this.userService.getUserByEmail(email);
-    
-    if (!user) {
-      return [];
-    }
-    
-    // Get the latest submission date
-    const { data: latestData, error: latestError } = await this.supabase
+    if (!user) return [];
+    const { data, error } = await this.supabase
       .from('user_rankings')
-      .select('submission_date')
+      .select('rankings')
       .eq('user_id', user.id)
       .eq('ranking_type', rankingType)
       .order('submission_date', { ascending: false })
       .limit(1)
       .single();
-    
-    if (latestError || !latestData) {
-      return [];
-    }
-    
-    // Get rankings for that date
-    const { data, error } = await this.supabase
-      .from('user_rankings')
-      .select(`
-        *,
-        players:player_id (
-          id, name, full_name, position, team, image_url
-        )
-      `)
-      .eq('user_id', user.id)
-      .eq('ranking_type', rankingType)
-      .eq('submission_date', latestData.submission_date)
-      .order('rank', { ascending: true });
-    
-    if (error) throw error;
-    return data as unknown as UserRanking[];
+    if (error || !data) return [];
+    return data.rankings || [];
   }
   
   /**
