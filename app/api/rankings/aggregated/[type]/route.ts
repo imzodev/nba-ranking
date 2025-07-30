@@ -23,8 +23,10 @@ export async function GET(
       );
     }
     
+    const limitParam = searchParams.get('limit');
+    const limit = limitParam ? parseInt(limitParam) : undefined;
     const rankingService = new RankingService();
-    const rankings = await rankingService.getAggregatedRankings(rankingType, date || undefined);
+    const rankings = await rankingService.getAggregatedRankings(rankingType, date || undefined, limit);
     
     return NextResponse.json({ rankings });
   } catch (error: any) {

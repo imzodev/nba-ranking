@@ -198,12 +198,12 @@ export class RankingService {
    * Get aggregated rankings for a specific type and date
    * @param rankingType Type of ranking (10, 25, 50, or 100)
    * @param date Optional date string (YYYY-MM-DD), defaults to today
+   * @param limit Optional max number of players to return
    * @returns Array of aggregated rankings with player details
    */
-  async getAggregatedRankings(rankingType: number, date?: string): Promise<any[]> {
+  async getAggregatedRankings(rankingType: number, date?: string, limit?: number): Promise<any[]> {
     const targetDate = date || new Date().toISOString().split('T')[0];
-    
-    const { data, error } = await this.supabase
+    let query = this.supabase
       .from('aggregated_rankings')
       .select(`
         *,
@@ -214,8 +214,11 @@ export class RankingService {
       .eq('ranking_type', rankingType)
       .eq('calculation_date', targetDate)
       .order('points', { ascending: false })
-    .order('average_rank', { ascending: true });
-    
+      .order('average_rank', { ascending: true });
+    if (limit) {
+      query = query.limit(limit);
+    }
+    const { data, error } = await query;
     if (error) throw error;
     return data || [];
   }

@@ -47,7 +47,7 @@ export default function RankingsPage() {
         setPlayers(playersMap);
         
         // Fetch aggregated rankings
-        const rankingsResponse = await fetch(`/api/rankings/aggregated/${Number(rankingType)}`);
+        const rankingsResponse = await fetch(`/api/rankings/aggregated/${Number(rankingType)}?limit=${rankingType}`);
         if (!rankingsResponse.ok) {
           throw new Error('Failed to fetch rankings');
         }
@@ -108,7 +108,7 @@ export default function RankingsPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            {rankings.map((ranking, index) => {
+            {rankings.slice(0, rankingType).map((ranking, index) => {
               const player = players[ranking.player_id];
               if (!player) return null;
               const place = index + 1;
