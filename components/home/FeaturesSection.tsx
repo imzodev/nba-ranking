@@ -25,16 +25,16 @@ const FeaturesSection = () => (
       <div className="text-center mb-24">
         <div className="inline-block mb-6">
           <span className="px-6 py-2 bg-gradient-to-r from-[#17408B]/10 to-[#C9082A]/10 rounded-full text-sm font-semibold text-[#17408B] dark:text-blue-400 border border-[#17408B]/20">
-            PROFESSIONAL BASKETBALL ANALYSIS
+            FAN-POWERED NBA RANKINGS
           </span>
         </div>
         <h2 className="text-6xl lg:text-7xl font-black text-gray-900 dark:text-white mb-8 leading-tight">
-          Rank NBA
+          NBA Rankings
           <br />
-          <span className="text-[#C9082A] dark:text-white">Players</span>
+          <span className="text-[#C9082A] dark:text-white">By The Fans</span>
         </h2>
         <p className="text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
-          Create your NBA player rankings and see how they compare to the public consensus
+          Your vote matters! Join thousands of fans in creating the definitive NBA player rankings through community voting
         </p>
       </div>
 
@@ -47,20 +47,20 @@ const FeaturesSection = () => (
               <div className="absolute -top-8 -left-8 text-8xl font-black text-[#17408B]/10 dark:text-blue-400/10 select-none">01</div>
               
               <div className="relative bg-white dark:bg-gray-800 rounded-3xl p-12 shadow-2xl border border-gray-100 dark:border-gray-700">
-                <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Browse NBA Players</h3>
+                <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Vote For Your Favorites</h3>
                 <div className="w-20 h-1 bg-gradient-to-r from-[#17408B] to-[#C9082A] rounded-full mb-6"></div>
                 <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-                  Browse through NBA players from different eras and select the ones you want to include in your personal rankings.
+                  Every fan vote counts! Browse through NBA legends and current stars to cast your votes and help shape the definitive fan rankings.
                 </p>
                 
                 <div className="space-y-4 mb-8">
                   <div className="flex items-center text-gray-700 dark:text-gray-300">
                     <div className="w-2 h-2 bg-[#17408B] rounded-full mr-4"></div>
-                    <span className="text-lg">NBA legends and current players</span>
+                    <span className="text-lg">Your votes shape the official fan rankings</span>
                   </div>
                   <div className="flex items-center text-gray-700 dark:text-gray-300">
                     <div className="w-2 h-2 bg-[#C9082A] rounded-full mr-4"></div>
-                    <span className="text-lg">Easy player selection for rankings</span>
+                    <span className="text-lg">Rankings updated in real-time with fan votes</span>
                   </div>
                   <div className="flex items-center text-gray-700 dark:text-gray-300">
                     <div className="w-2 h-2 bg-slate-600 rounded-full mr-4"></div>
@@ -140,10 +140,6 @@ const FeaturesSection = () => (
                     </g>
                   </g>
                 ))}
-                
-                <g transform="translate(370, 120)" className="animate-bounce">
-                  <path d="M0,0 L10,10 L5,10 L5,20 L-5,20 L-5,10 L-10,10 Z" fill="#C9082A" opacity="0.7" />
-                </g>
               </svg>
             </div>
           </div>
@@ -153,10 +149,10 @@ const FeaturesSection = () => (
               <div className="absolute -top-8 -right-8 text-8xl font-black text-[#C9082A]/10 dark:text-red-400/10 select-none">02</div>
               
               <div className="relative bg-white dark:bg-gray-800 rounded-3xl p-12 shadow-2xl border border-gray-100 dark:border-gray-700">
-                <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Create Your Rankings</h3>
+                <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Community-Driven Rankings</h3>
                 <div className="w-20 h-1 bg-gradient-to-r from-[#C9082A] to-red-600 rounded-full mb-6"></div>
                 <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-                  Drag and drop NBA players to create your personal ranking list. Choose your top players and arrange them in your preferred order.
+                  The ultimate NBA player rankings created by fans, not analysts. Your votes combine with thousands of others to create the true voice of basketball fandom.
                 </p>
                 
                 <div className="space-y-4 mb-8">
@@ -194,10 +190,10 @@ const FeaturesSection = () => (
           
           <div className="relative">
             <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
-              Ready to Rank NBA Players?
+              Join The Fan Community
             </h3>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
-              Create your personal NBA player rankings and see how they compare to the public consensus
+              Add your voice to thousands of passionate NBA fans and help determine the true fan-voted player rankings
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -219,7 +215,7 @@ const FeaturesSection = () => (
                 className="group relative border-2 border-[#17408B] text-[#17408B] dark:text-blue-400 dark:border-blue-400 px-10 py-5 rounded-2xl font-bold text-xl hover:bg-[#17408B] hover:text-white dark:hover:bg-blue-400 dark:hover:text-gray-900 transition-all duration-300 overflow-hidden"
               >
                 <span className="relative flex items-center">
-                  View Public Rankings
+                  See Fan Rankings
                   <svg className="w-6 h-6 ml-3 transform group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
