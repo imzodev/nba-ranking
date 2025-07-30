@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
-import PlayerCard from '@/components/player/PlayerCard';
+import Image from 'next/image';
 import { RANKING_TYPE_LABELS, RANKING_TYPES, type RankingType } from '@/lib/utils/constants';
 
 function isRankingType(val: number): val is RankingType {
@@ -107,22 +107,40 @@ export default function RankingsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {rankings.map((ranking) => {
+          <div className="flex flex-col gap-6">
+            {rankings.map((ranking, index) => {
               const player = players[ranking.player_id];
               if (!player) return null;
-              
+              const place = index + 1;
               return (
-                <div key={ranking.player_id} className="relative">
-                  <div className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B] flex items-center justify-center font-bold shadow-lg z-10 border-2 border-white dark:border-gray-800">
-                    {ranking.rank}
+                <div key={ranking.player_id} className="relative flex flex-col items-center bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 pt-10 border border-gray-200 dark:border-gray-800 transition-all hover:scale-[1.02]">
+                  {/* Place Badge */}
+                  <div className={`absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-lg shadow-lg z-10 border-4 border-white dark:border-gray-900 ${place === 1 ? 'bg-yellow-400 text-white' : place === 2 ? 'bg-gray-300 text-gray-800' : place === 3 ? 'bg-orange-500 text-white' : 'bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B]'}`}> 
+                    {place}
                   </div>
-                  <PlayerCard
-                    player={player}
-                    rank={ranking.rank}
-                    points={ranking.points}
-                    showDetails={true}
-                  />
+
+                  {/* Player Image */}
+                  {player.image_url ? (
+                    <Image
+                      src={player.image_url}
+                      alt={player.name}
+                      width={80}
+                      height={80}
+                      className="w-20 h-20 rounded-full object-cover border-4 border-gray-200 dark:border-gray-800 mb-3 mt-2 shadow-md bg-gray-50 dark:bg-gray-800"
+                      priority
+                    />
+                  ) : (
+                    <div className="w-20 h-20 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 border-4 border-gray-200 dark:border-gray-800 mb-3 mt-2 text-3xl text-gray-400">
+                      <span>{player.name[0]}</span>
+                    </div>
+                  )}
+
+                  {/* Player Info */}
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-center mb-1">{player.name}</h2>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{player.position}</span>
+                  </div>
+
                 </div>
               );
             })}
