@@ -24,6 +24,10 @@ export default function CreateRankingPage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
   const [rankingType, setRankingType] = useState<number>(RANKING_TYPES[1]); // Default to Top 25
+
+// Always keep rankingType as a valid number
+const allowedRankingTypes = [10, 25, 50, 100];
+const validRankingType = allowedRankingTypes.includes(Number(rankingType)) ? Number(rankingType) : undefined;
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submissionSuccess, setSubmissionSuccess] = useState<boolean>(false);
   const [submissionError, setSubmissionError] = useState<string>('');
@@ -125,18 +129,19 @@ export default function CreateRankingPage() {
         },
         body: JSON.stringify({
           email: submission.email,
-          rankingType: submission.ranking_type,
-          rankings: submission.rankings.map(r => ({
-            player_id: r.playerId,
+          name: submission.name,
+          ranking_type: submission.ranking_type,
+          rankings: submission.rankings.map((r) => ({
+            playerId: r.playerId,
             rank: r.rank,
           })),
         }),
       });
-      
+
       if (!rankingResponse.ok) {
         throw new Error('Failed to submit ranking');
       }
-      
+
       setSubmissionSuccess(true);
       // Reset the form
       setSelectedPlayers([]);

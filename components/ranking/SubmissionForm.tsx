@@ -45,12 +45,28 @@ export default function SubmissionForm({
       setNameError('');
     }
     
+    // Validate rankingType
+    const allowedTypes = [10, 25, 50, 100];
+    if (!allowedTypes.includes(Number(rankingType))) {
+      setSubmissionError('Invalid ranking type. Must be 10, 25, 50, or 100.');
+      isValid = false;
+      return isValid;
+    }
+
     // Validate players
-    if (players.length !== rankingType) {
+    if (players.length !== Number(rankingType)) {
       setSubmissionError(`You must select exactly ${rankingType} player${rankingType === 1 ? '' : 's'} for your top ${rankingType} ranking.`);
       isValid = false;
     } else {
       setSubmissionError('');
+    }
+
+    // Validate duplicate players
+    const playerIds = players.map(p => p.id);
+    const uniquePlayerIds = new Set(playerIds);
+    if (uniquePlayerIds.size !== playerIds.length) {
+      setSubmissionError('Rankings contain duplicate players. Each player must be unique.');
+      isValid = false;
     }
     
     return isValid;
@@ -66,7 +82,7 @@ export default function SubmissionForm({
     const submission: RankingSubmission = {
       email,
       name,
-      ranking_type: rankingType,
+      ranking_type: Number(rankingType),
       rankings: players.map((player, index) => ({
         playerId: player.id,
         rank: index + 1,
