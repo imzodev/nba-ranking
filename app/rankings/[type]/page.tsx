@@ -107,40 +107,50 @@ export default function RankingsPage() {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-8 max-w-4xl mx-auto">
             {rankings.slice(0, rankingType).map((ranking, index) => {
               const player = players[ranking.player_id];
               if (!player) return null;
               const place = index + 1;
               return (
-                <div key={ranking.player_id} className="relative flex flex-col items-center bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 pt-10 border border-gray-200 dark:border-gray-800 transition-all hover:scale-[1.02]">
-                  {/* Place Badge */}
-                  <div className={`absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-lg shadow-lg z-10 border-4 border-white dark:border-gray-900 ${place === 1 ? 'bg-yellow-400 text-white' : place === 2 ? 'bg-gray-300 text-gray-800' : place === 3 ? 'bg-orange-500 text-white' : 'bg-[#17408B] dark:bg-[#FDBB30] text-white dark:text-[#17408B]'}`}> 
-                    {place}
-                  </div>
-
-                  {/* Player Image */}
-                  {player.image_url ? (
-                    <Image
-                      src={player.image_url}
-                      alt={player.name}
-                      width={80}
-                      height={80}
-                      className="w-20 h-20 rounded-full object-cover border-4 border-gray-200 dark:border-gray-800 mb-3 mt-2 shadow-md bg-gray-50 dark:bg-gray-800"
-                      priority
-                    />
-                  ) : (
-                    <div className="w-20 h-20 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 border-4 border-gray-200 dark:border-gray-800 mb-3 mt-2 text-3xl text-gray-400">
-                      <span>{player.name[0]}</span>
+                <div key={ranking.player_id} className="relative overflow-hidden flex bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-100 dark:border-gray-800 transition-all hover:shadow-lg group">
+                  <div className="flex flex-row w-full items-center z-10">
+                    {/* Left Side - Image with Rank Number */}
+                    <div className="relative flex-shrink-0" style={{ width: '150px', height: '150px' }}>
+                      {/* Player Image */}
+                      {player.image_url ? (
+                        <div className="h-full w-full flex items-center justify-center overflow-hidden">
+                          <Image
+                            src={player.image_url}
+                            alt={player.name}
+                            width={150}
+                            height={150}
+                            className="h-full w-full object-cover"
+                            priority
+                          />
+                        </div>
+                      ) : (
+                        <div className="h-full w-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-5xl font-light text-gray-500 dark:text-gray-400">
+                          <span>{player.name[0]}</span>
+                        </div>
+                      )}
+                      
+                      {/* Rank Number in corner with background */}
+                      <div className={`absolute top-0 left-0 px-3 py-1 font-bold text-xl z-10 rounded-br-lg text-white ${place === 1 ? 'bg-amber-500' : place === 2 ? 'bg-gray-400' : place === 3 ? 'bg-amber-700' : 'bg-[#FF6B00]'}`}> 
+                        {place}
+                      </div>
                     </div>
-                  )}
 
-                  {/* Player Info */}
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-center mb-1">{player.name}</h2>
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{player.position}</span>
+                    {/* Right Side - Player Name with Faded Number */}
+                    <div className="flex items-center justify-between flex-1 h-full px-6 py-4 relative">
+                      <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100 z-10">{player.name}</h2>
+                      
+                      {/* Faded Rank Number */}
+                      <div className="absolute right-4 opacity-[0.08] text-[160px] font-black text-gray-900 dark:text-gray-100 select-none">
+                        {place}
+                      </div>
+                    </div>
                   </div>
-
                 </div>
               );
             })}
