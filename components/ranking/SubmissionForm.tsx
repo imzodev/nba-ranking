@@ -46,8 +46,8 @@ export default function SubmissionForm({
     }
     
     // Validate players
-    if (players.length === 0) {
-      setSubmissionError('Please select at least one player for your ranking');
+    if (players.length !== rankingType) {
+      setSubmissionError(`You must select exactly ${rankingType} player${rankingType === 1 ? '' : 's'} for your top ${rankingType} ranking.`);
       isValid = false;
     } else {
       setSubmissionError('');
