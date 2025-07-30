@@ -91,19 +91,21 @@ export default function PlayerGrid({
               <Search size={18} />
             </div>
             <input
+              id="player-search"
+              name="player-search"
               type="text"
               className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#17408B] dark:focus:ring-[#FDBB30] focus:border-[#17408B] dark:focus:border-[#FDBB30] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all"
               placeholder="Search players by name or team..."
               value={localSearchQuery}
               onChange={(e) => setLocalSearchQuery(e.target.value)}
-            />
+/>
             {localSearchQuery && (
               <button
-  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-  onClick={() => setLocalSearchQuery('')}
->
-  <X className="h-5 w-5" />
-</button>
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                onClick={() => setLocalSearchQuery('')}
+              >
+                <X className="h-5 w-5" />
+              </button>
             )}
           </div>
         </div>
