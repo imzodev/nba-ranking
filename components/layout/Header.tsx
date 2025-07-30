@@ -76,7 +76,7 @@ export default function Header() {
             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
               <div className="w-8 h-8 relative">
                 <Image
-                  src="/nba-logo.svg"
+                  src="/nba-logo.png"
                   alt="NBA Logo"
                   fill
                   className="object-contain"
