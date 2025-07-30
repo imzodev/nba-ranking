@@ -68,7 +68,7 @@ const FeaturesSection = () => (
                   </div>
                 </div>
                 
-                <Link href="/players" className="inline-flex items-center bg-gradient-to-r from-[#17408B] to-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                <Link href="/create" className="inline-flex items-center bg-gradient-to-r from-[#17408B] to-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
                   Browse Players
                   <svg className="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
