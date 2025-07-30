@@ -10,7 +10,7 @@ export async function GET(
   request: Request,
   context: { params: { type: string } }
 ) {
-  const { params } = await context;
+  const { params } = context;
   try {
     const rankingType = parseInt(params.type);
     const { searchParams } = new URL(request.url);

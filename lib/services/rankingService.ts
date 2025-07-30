@@ -213,7 +213,8 @@ export class RankingService {
       `)
       .eq('ranking_type', rankingType)
       .eq('calculation_date', targetDate)
-      .order('rank', { ascending: true });
+      .order('points', { ascending: false })
+    .order('average_rank', { ascending: true });
     
     if (error) throw error;
     return data || [];
