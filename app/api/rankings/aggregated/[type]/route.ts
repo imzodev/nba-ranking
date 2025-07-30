@@ -8,8 +8,9 @@ import { isValidRankingType } from '@/lib/utils/validation';
  */
 export async function GET(
   request: Request,
-  { params }: { params: { type: string } }
+  context: { params: { type: string } }
 ) {
+  const { params } = await context;
   try {
     const rankingType = parseInt(params.type);
     const { searchParams } = new URL(request.url);

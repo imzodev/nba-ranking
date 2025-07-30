@@ -81,10 +81,77 @@ export class RankingService {
     if (rankingsError) {
       return { success: false, error: rankingsError };
     }
-    
+
+    // Update aggregated rankings
+    await this.upsertAggregatedRankings(rankings, rankingType, today);
+
     return { success: true, error: null };
   }
-  
+
+  /**
+   * Upsert aggregated rankings for a submission
+   * @param rankings Array of player rankings
+   * @param rankingType Type of ranking (10, 25, 50, or 100)
+   * @param calculationDate Date string (YYYY-MM-DD)
+   */
+  async upsertAggregatedRankings(
+    rankings: Array<{playerId: string, rank: number}>,
+    rankingType: number,
+    calculationDate: string
+  ): Promise<void> {
+    for (const { playerId, rank } of rankings) {
+      const points = rankingType + 1 - rank;
+      // Try to update existing row
+      const { data, error } = await this.supabase
+        .from('aggregated_rankings')
+        .select('id, points, appearances, average_rank')
+        .eq('player_id', playerId)
+        .eq('ranking_type', rankingType)
+        .eq('calculation_date', calculationDate)
+        .maybeSingle();
+      if (error) {
+        console.error(`[upsertAggregatedRankings] Error selecting row for playerId ${playerId}:`, error);
+        continue;
+      }
+      if (data) {
+        // Row exists: update it
+        const newPoints = data.points + points;
+        const newAppearances = data.appearances + 1;
+        const newAvg = ((data.average_rank * data.appearances) + rank) / newAppearances;
+        const { error: updateError } = await this.supabase
+          .from('aggregated_rankings')
+          .update({
+            points: newPoints,
+            appearances: newAppearances,
+            average_rank: newAvg,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', data.id);
+        if (updateError) {
+          console.error(`[upsertAggregatedRankings] Error updating row for playerId ${playerId}:`, updateError);
+        }
+      } else {
+        // Row does not exist: insert
+        const insertObj = {
+          player_id: playerId,
+          ranking_type: rankingType,
+          calculation_date: calculationDate,
+          points,
+          appearances: 1,
+          average_rank: rank,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        const { error: insertError } = await this.supabase
+          .from('aggregated_rankings')
+          .insert(insertObj);
+        if (insertError) {
+          console.error(`[upsertAggregatedRankings] Error inserting row for playerId ${playerId}:`, insertError, insertObj);
+        }
+      }
+    }
+  }
+
   /**
    * Get a user's rankings for a specific type
    * @param email User's email
