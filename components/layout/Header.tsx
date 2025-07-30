@@ -28,9 +28,10 @@ export default function Header() {
                 src="/nba-logo.png"
                 alt="NBA Logo"
                 fill
+                sizes="(max-width: 1024px) 80px, 128px"
                 className="object-contain"
                 priority
-              />
+/>
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-xl text-[#17408B] dark:text-white leading-none">NBA</span>
@@ -79,6 +80,7 @@ export default function Header() {
                   src="/nba-logo.png"
                   alt="NBA Logo"
                   fill
+                  sizes="32px"
                   className="object-contain"
                   priority
                 />

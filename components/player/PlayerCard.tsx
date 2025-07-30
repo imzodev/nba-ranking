@@ -65,6 +65,7 @@ export default function PlayerCard({
               src={player.image_url}
               alt={player.name}
               fill
+              sizes="56px"
               className="object-cover"
             />
           ) : (
