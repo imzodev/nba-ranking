@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Mail, User, AlertCircle, Send, Loader2 } from 'lucide-react';
 import { isValidEmail, isValidName } from '@/lib/utils/validation';
 import type { Player } from '@/lib/types/Player';
 import type { RankingSubmission } from '@/lib/types/Ranking';
@@ -25,11 +26,8 @@ export default function SubmissionForm({
   const validateForm = (): boolean => {
     let isValid = true;
     
-    // Validate email
-    if (!email) {
-      setEmailError('Email is required');
-      isValid = false;
-    } else if (!isValidEmail(email)) {
+    // Validate email (optional)
+    if (email && !isValidEmail(email)) {
       setEmailError('Please enter a valid email address');
       isValid = false;
     } else {
@@ -87,106 +85,119 @@ export default function SubmissionForm({
   };
   
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Your Information</h3>
-        
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Email address
-            </label>
-            <div className="mt-1">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-gray-700 shadow-sm ring-1 ring-inset ${
-                  emailError ? 'ring-red-500 focus:ring-red-500' : 'ring-gray-300 dark:ring-gray-600 focus:ring-nba-blue'
-                } placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
-                placeholder="you@example.com"
-                aria-invalid={!!emailError}
-                aria-describedby={emailError ? "email-error" : undefined}
-              />
-              {emailError && (
-                <p className="mt-2 text-sm text-red-600" id="email-error">
-                  {emailError}
-                </p>
+    <div className="mx-auto max-w-2xl">
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-6 flex items-center">
+            <User className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400" />
+            Your Information
+          </h3>
+          
+          <div className="space-y-6">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Your name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-4 w-4 text-gray-400" />
+                </div>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className={`block w-full pl-10 pr-3 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-0 transition-colors ${
+                    nameError 
+                      ? 'border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-500/20' 
+                      : 'border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500/20'
+                  }`}
+                  placeholder="John Smith"
+                  aria-invalid={!!nameError}
+                  aria-describedby={nameError ? "name-error" : undefined}
+                />
+              </div>
+              {nameError && (
+                <div className="mt-2 flex items-center" id="name-error">
+                  <AlertCircle className="h-4 w-4 text-red-500 mr-2" />
+                  <p className="text-sm text-red-600 dark:text-red-400">{nameError}</p>
+                </div>
               )}
             </div>
-          </div>
-          
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Your name
-            </label>
-            <div className="mt-1">
-              <input
-                id="name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-gray-700 shadow-sm ring-1 ring-inset ${
-                  nameError ? 'ring-red-500 focus:ring-red-500' : 'ring-gray-300 dark:ring-gray-600 focus:ring-nba-blue'
-                } placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6`}
-                placeholder="John Smith"
-                aria-invalid={!!nameError}
-                aria-describedby={nameError ? "name-error" : undefined}
-              />
-              {nameError && (
-                <p className="mt-2 text-sm text-red-600" id="name-error">
-                  {nameError}
-                </p>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Email address <span className="text-gray-400">(optional)</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-4 w-4 text-gray-400" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={`block w-full pl-10 pr-3 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-0 transition-colors ${
+                    emailError 
+                      ? 'border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-500/20' 
+                      : 'border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500/20'
+                  }`}
+                  placeholder="you@example.com"
+                  aria-invalid={!!emailError}
+                  aria-describedby={emailError ? "email-error" : undefined}
+                />
+              </div>
+              {emailError && (
+                <div className="mt-2 flex items-center" id="email-error">
+                  <AlertCircle className="h-4 w-4 text-red-500 mr-2" />
+                  <p className="text-sm text-red-600 dark:text-red-400">{emailError}</p>
+                </div>
               )}
             </div>
           </div>
         </div>
-      </div>
-      
-      {submissionError && (
-        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800 dark:text-red-200">Submission Error</h3>
-              <div className="mt-2 text-sm text-red-700 dark:text-red-300">
-                <p>{submissionError}</p>
+        
+        {submissionError && (
+          <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-md p-4">
+            <div className="flex items-start">
+              <AlertCircle className="h-5 w-5 text-red-400 mt-0.5 mr-3 flex-shrink-0" />
+              <div>
+                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">Submission Error</h3>
+                <p className="mt-1 text-sm text-red-700 dark:text-red-300">{submissionError}</p>
               </div>
             </div>
           </div>
+        )}
+        
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            onClick={handleSubmit}
+            className={`inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${
+              isSubmitting 
+                ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed' 
+                : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 focus:ring-gray-500'
+            }`}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4 mr-2" />
+                Submit Ranking
+              </>
+            )}
+          </button>
         </div>
-      )}
-      
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`inline-flex justify-center rounded-md bg-nba-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-nba-blue/90 focus-visible:outline-offset-2 focus-visible:ring-2 focus-visible:ring-nba-blue ${
-            isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
-          }`}
-        >
-          {isSubmitting ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Submitting...
-            </>
-          ) : (
-            'Submit Ranking'
-          )}
-        </button>
       </div>
-    </form>
+    </div>
   );
 }
