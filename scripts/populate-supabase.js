@@ -74,7 +74,7 @@ class SupabasePopulator {
       'NBA Draft', 'All-Star', 'All-NBA', 'All-Defensive',
       'Bucks', 'Bulls', 'Cavaliers', 'Celtics', 'Clippers', 
       'Grizzlies', 'Hawks', 'Heat', 'Hornets', 'Jazz', 
-      'Kings', 'Knicks', 'Lakers', 'Magic', 'Mavericks', 
+      'Kings', 'Knicks', 'Lakers', 'Mavericks', 
       'Nets', 'Nuggets', 'Pacers', 'Pelicans', 'Pistons', 
       'Raptors', 'Rockets', 'Spurs', 'Suns', 'Thunder', 
       'Timberwolves', 'Trail Blazers', 'Warriors', 'Wizards',
@@ -95,10 +95,9 @@ class SupabasePopulator {
       // At least one of these should be present for a player
       fields.position, fields.career_position, fields.height, 
       fields.height_ft, fields.weight, fields.weight_lb,
-      fields.birth_date, fields.birth_place, fields.high_school,
+      fields.birth_date, fields.birth_place,
       fields.college, fields.draft_year, fields.career_start,
-      highlights.length > 0, careerHistory.length > 0,
-      fields.stat1value, fields.stat2value, fields.stat3value
+      highlights.length > 0
     ];
     
     // Count how many player indicators are present
@@ -163,16 +162,16 @@ class SupabasePopulator {
           }
 
           // Prepare player data
-          const playerName = fields.name || playerName.replace(/_/g, ' ');
+          const playerDisplayName = fields.name || playerName.replace(/_/g, ' ');
           const isTopPlayer = this.topPlayers.some(name => {
             // Check if player name matches or is contained within full name
-            return playerName === name || 
-                   playerName.includes(name) || 
-                   name.includes(playerName);
+            return playerDisplayName === name || 
+                   playerDisplayName.includes(name) || 
+                   name.includes(playerDisplayName);
           });
           
           const playerRecord = {
-            name: playerName,
+            name: playerDisplayName,
             full_name: fields.name || playerName.replace(/_/g, ' '),
             position: fields.position || fields.career_position,
             team: fields.team || fields.current_team || 'Free Agent',
@@ -203,9 +202,9 @@ class SupabasePopulator {
             .upsert(playerRecord, { onConflict: 'name' });
 
           if (error) {
-            console.error(`❌ Error adding ${fields.name || playerName}:`, error);
+            console.error(`❌ Error adding ${fields.name || playerDisplayName}:`, error);
           } else {
-            console.log(`✅ Added ${fields.name || playerName}`);
+            console.log(`✅ Added ${fields.name || playerDisplayName}${isTopPlayer ? ' (Top Player)' : ''}`);
           }
         } else {
           console.log(`❌ Failed to extract ${playerName}`);
