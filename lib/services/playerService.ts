@@ -9,6 +9,26 @@ export class PlayerService {
   }
   
   /**
+   * Normalize image URLs to ensure they are valid for Next.js Image component
+   * @param players Array of players to normalize image URLs for
+   * @returns Array of players with normalized image URLs
+   */
+  private normalizeImageUrls(players: Player[]): Player[] {
+    return players.map(player => {
+      if (!player.image_url) return player;
+      
+      // If URL doesn't start with http://, https://, or /, prepend /
+      if (!player.image_url.startsWith('http://') && 
+          !player.image_url.startsWith('https://') && 
+          !player.image_url.startsWith('/')) {
+        player.image_url = `/${player.image_url}`;
+      }
+      
+      return player;
+    });
+  }
+
+  /**
    * Get all players with basic information
    * @param limit Optional limit on number of players to return
    * @returns Array of players with basic info
@@ -26,7 +46,8 @@ export class PlayerService {
     const { data, error } = await query;
     
     if (error) throw error;
-    return data as Player[];
+    // Normalize image URLs before returning
+    return this.normalizeImageUrls(data as Player[]);
   }
   
   /**
@@ -61,7 +82,8 @@ export class PlayerService {
       .limit(limit);
     
     if (error) throw error;
-    return data as Player[];
+    // Normalize image URLs before returning
+    return this.normalizeImageUrls(data as Player[]);
   }
   
   /**
@@ -84,6 +106,7 @@ export class PlayerService {
     const { data, error } = await query;
     
     if (error) throw error;
-    return data as Player[];
+    // Normalize image URLs before returning
+    return this.normalizeImageUrls(data as Player[]);
   }
 }

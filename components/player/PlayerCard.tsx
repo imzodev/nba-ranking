@@ -3,6 +3,35 @@ import { useState } from 'react';
 import { Eye, ChevronDown, ChevronUp, GripVertical } from 'lucide-react';
 import type { Player } from '@/lib/types/Player';
 
+// PlayerAvatar component to handle image loading with fallback
+const PlayerAvatar = ({ player }: { player: Player }) => {
+  const [imageError, setImageError] = useState(false);
+  
+  // If no image URL or previous error, show fallback
+  if (!player.image_url || imageError) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-400 font-semibold text-lg">
+        {player.name.charAt(0)}
+      </div>
+    );
+  }
+  
+  // Try to load the image, with onError handler
+  return (
+    <Image
+      src={player.image_url}
+      alt={player.name}
+      fill
+      sizes="56px"
+      className="object-cover"
+      onError={() => {
+        console.log(`Failed to load image for ${player.name}`);
+        setImageError(true);
+      }}
+    />
+  );
+};
+
 interface PlayerCardProps {
   player: Player;
   rank?: number;
@@ -60,19 +89,7 @@ export default function PlayerCard({
         )}
         
         <div className="flex-shrink-0 w-14 h-14 relative rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 ring-2 ring-gray-200 dark:ring-gray-700">
-          {player.image_url ? (
-            <Image
-              src={player.image_url}
-              alt={player.name}
-              fill
-              sizes="56px"
-              className="object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 text-gray-600 dark:text-gray-400 font-semibold text-lg">
-              {player.name.charAt(0)}
-            </div>
-          )}
+          <PlayerAvatar player={player} />
         </div>
         
         <div className="flex flex-col justify-center min-h-[56px] flex-grow min-w-0">
