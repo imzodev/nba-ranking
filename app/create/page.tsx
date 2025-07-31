@@ -57,7 +57,24 @@ const validRankingType = allowedRankingTypes.includes(Number(rankingType)) ? Num
           throw new Error('Failed to fetch players');
         }
         const data = await response.json();
-        setPlayers(data);
+        
+        // If this is not a search query, scramble the top 10 players to avoid bias
+        if (!isActualSearch && data.length > 0) {
+          // Take first 10 players (or all if less than 10) and shuffle them
+          const topPlayersToShuffle = data.slice(0, 10);
+          const remainingPlayers = data.slice(10);
+          
+          // Fisher-Yates shuffle algorithm for the top players
+          for (let i = topPlayersToShuffle.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [topPlayersToShuffle[i], topPlayersToShuffle[j]] = [topPlayersToShuffle[j], topPlayersToShuffle[i]];
+          }
+          
+          // Combine shuffled top players with remaining players
+          setPlayers([...topPlayersToShuffle, ...remainingPlayers]);
+        } else {
+          setPlayers(data);
+        }
       } catch (error) {
         console.error('Error fetching players:', error);
       } finally {
