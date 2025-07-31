@@ -37,7 +37,7 @@ export class PlayerService {
     let query = this.supabase
       .from('players')
       .select('id, name, full_name, position, team, image_url, highlights')
-      .order('name');
+      .order('points', { ascending: false });
     
     if (limit) {
       query = query.limit(limit);

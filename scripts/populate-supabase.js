@@ -10,6 +10,26 @@ class SupabasePopulator {
     this.extractor = new WorkingWikipediaExtractor();
     this.playerFetcher = new WikipediaPlayerFetcher();
     
+    // List of top/notable NBA players
+    this.topPlayers = [
+      // NBA legends and Hall of Famers
+      'Michael Jordan', 'LeBron James', 'Kobe Bryant', 'Magic Johnson', 'Larry Bird',
+      'Kareem Abdul-Jabbar', 'Wilt Chamberlain', 'Bill Russell', 'Shaquille O\'Neal', 'Tim Duncan',
+      'Hakeem Olajuwon', 'Oscar Robertson', 'Julius Erving', 'Jerry West', 'Kevin Durant',
+      'Stephen Curry', 'Dirk Nowitzki', 'Charles Barkley', 'Karl Malone', 'John Stockton',
+      'Kevin Garnett', 'Allen Iverson', 'Dwyane Wade', 'Scottie Pippen', 'David Robinson',
+      'Patrick Ewing', 'Isiah Thomas', 'Clyde Drexler', 'James Harden', 'Giannis Antetokounmpo',
+      'Russell Westbrook', 'Kawhi Leonard', 'Chris Paul', 'Gary Payton', 'Ray Allen',
+      'Reggie Miller', 'Dominique Wilkins', 'Bob Cousy', 'Elvin Hayes', 'John Havlicek',
+      'Moses Malone', 'Jason Kidd', 'Steve Nash', 'Bob Pettit', 'George Mikan',
+      'Nikola Jokić', 'Joel Embiid', 'Luka Dončić', 'Anthony Davis', 'Jayson Tatum',
+      
+      // Current stars
+      'Damian Lillard', 'Jimmy Butler', 'Paul George', 'Kyrie Irving', 'Devin Booker',
+      'Ja Morant', 'Trae Young', 'Donovan Mitchell', 'Bam Adebayo', 'Zion Williamson',
+      'Shai Gilgeous-Alexander', 'Jaylen Brown', 'Anthony Edwards', 'LaMelo Ball', 'Tyrese Haliburton'
+    ];
+    
     // Use environment variables for Supabase
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -143,8 +163,16 @@ class SupabasePopulator {
           }
 
           // Prepare player data
+          const playerName = fields.name || playerName.replace(/_/g, ' ');
+          const isTopPlayer = this.topPlayers.some(name => {
+            // Check if player name matches or is contained within full name
+            return playerName === name || 
+                   playerName.includes(name) || 
+                   name.includes(playerName);
+          });
+          
           const playerRecord = {
-            name: fields.name || playerName.replace(/_/g, ' '),
+            name: playerName,
             full_name: fields.name || playerName.replace(/_/g, ' '),
             position: fields.position || fields.career_position,
             team: fields.team || fields.current_team || 'Free Agent',
@@ -165,6 +193,7 @@ class SupabasePopulator {
               `https://upload.wikimedia.org/wikipedia/commons/${fields.image}`,
             wikipedia_url: playerData.wikipedia_url,
             highlights: highlights,
+            points: isTopPlayer ? 1 : 0, // If its a top player mark points as 1 so we can order by points and show these first
             raw_infobox: fields
           };
 
