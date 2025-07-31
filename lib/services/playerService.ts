@@ -46,16 +46,17 @@ export class PlayerService {
   }
   
   /**
-   * Search players by name
+   * Search players by name, full name, or team
    * @param query Search query string
-   * @param limit Optional limit on number of players to return (defaults to 20)
+   * @param limit Optional limit on number of players to return (defaults to 50)
    * @returns Array of matching players
    */
-  async searchPlayers(query: string, limit: number = 20): Promise<Player[]> {
+  async searchPlayers(query: string, limit: number = 50): Promise<Player[]> {
+    // Create a more comprehensive search that looks at multiple fields
     const { data, error } = await this.supabase
       .from('players')
-      .select('id, name, full_name, position, team, image_url')
-      .ilike('name', `%${query}%`)
+      .select('id, name, full_name, position, team, image_url, highlights')
+      .or(`name.ilike.%${query}%,full_name.ilike.%${query}%,team.ilike.%${query}%`)
       .order('name')
       .limit(limit);
     

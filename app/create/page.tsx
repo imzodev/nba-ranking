@@ -32,42 +32,48 @@ const validRankingType = allowedRankingTypes.includes(Number(rankingType)) ? Num
   const [submissionSuccess, setSubmissionSuccess] = useState<boolean>(false);
   const [submissionError, setSubmissionError] = useState<string>('');
   
-  // Fetch players from API
+  // State for search query and loading state
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  // Fetch players from API with search capability
   useEffect(() => {
     const fetchPlayers = async () => {
+      // Only show loading indicator and perform search when we have 3+ characters
+      const isActualSearch = searchQuery.length >= 3;
+      
+      if (isActualSearch) {
+        setIsLoading(true);
+      }
+      
       try {
-        // Fetch players with a larger limit to provide more options
-        const response = await fetch('/api/players?limit=50');
+        // Only search if query has 3+ characters, otherwise show default list
+        const apiUrl = isActualSearch
+          ? `/api/players?query=${encodeURIComponent(searchQuery)}&limit=50`
+          : '/api/players?limit=50';
+          
+        const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error('Failed to fetch players');
         }
         const data = await response.json();
-        // The API now returns the players array directly
         setPlayers(data);
       } catch (error) {
         console.error('Error fetching players:', error);
+      } finally {
+        if (isActualSearch) {
+          setIsLoading(false);
+        }
       }
     };
     
-    fetchPlayers();
-  }, []);
-  
-  // State for search query
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  
-  // Filter players based on search query
-  const filteredPlayers = useMemo(() => {
-    return players.filter((player) => {
-      if (searchQuery === '') return true;
-      
-      const query = searchQuery.toLowerCase();
-      return (
-        player.name.toLowerCase().includes(query) ||
-        (player.full_name && player.full_name.toLowerCase().includes(query)) ||
-        (player.team && player.team.toLowerCase().includes(query))
-      );
-    });
-  }, [players, searchQuery]);
+    // Use a debounce to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      fetchPlayers();
+    }, 300); // 300ms debounce
+    
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]); // Re-fetch when search query changes
   
   const handleAddPlayer = (player: Player) => {
     // Check if player is already in the list
@@ -223,7 +229,7 @@ const validRankingType = allowedRankingTypes.includes(Number(rankingType)) ? Num
                   <div className="w-full">
                     <div className="w-full">
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-1">
-                        {filteredPlayers.length} player{filteredPlayers.length !== 1 ? 's' : ''} available
+                        {players.length} player{players.length !== 1 ? 's' : ''} available
                       </p>
                     </div>
                   </div>
@@ -233,6 +239,9 @@ const validRankingType = allowedRankingTypes.includes(Number(rankingType)) ? Num
                   players={Array.isArray(players) ? players.filter(player => !selectedPlayers.some(p => p.id === player.id)) : []}
                   onSelectPlayer={handleAddPlayer}
                   onPlayerDetails={handlePlayerDetails}
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  isLoading={isLoading}
                   showSearch={true}
                 />              </div>
             </div>

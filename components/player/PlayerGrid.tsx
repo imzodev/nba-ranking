@@ -9,8 +9,10 @@ interface PlayerGridProps {
   onPlayerClick?: (player: Player) => void;
   selectedPlayers?: Player[];
   searchQuery?: string;
+  onSearchChange?: (query: string) => void;
   positionFilter?: string;
   showSearch?: boolean;
+  isLoading?: boolean;
 }
 
 interface PlayerGridProps {
@@ -20,8 +22,10 @@ interface PlayerGridProps {
   onPlayerDetails?: (player: Player) => void;
   selectedPlayers?: Player[];
   searchQuery?: string;
+  onSearchChange?: (query: string) => void;
   positionFilter?: string;
   showSearch?: boolean;
+  isLoading?: boolean;
 }
 
 export default function PlayerGrid({
@@ -31,39 +35,39 @@ export default function PlayerGrid({
   onPlayerDetails,
   selectedPlayers = [],
   searchQuery = '',
+  onSearchChange,
   positionFilter = '',
   showSearch = true,
+  isLoading = false,
 }: PlayerGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
-  const [isLoading, setIsLoading] = useState(false);
   const playersPerPage = 16;
   
   // Reset page when search query changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [localSearchQuery]);
+  }, [searchQuery]);
   
-  // Simulate loading state when filtering
+  // Update local search query when prop changes
   useEffect(() => {
-    if (localSearchQuery !== searchQuery) {
-      setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [localSearchQuery, searchQuery]);
+    setLocalSearchQuery(searchQuery);
+  }, [searchQuery]);
   
-  // Filter players based on search query and position filter
+  // Handle search input changes
+  const handleSearchChange = (value: string) => {
+    setLocalSearchQuery(value);
+    if (onSearchChange) {
+      onSearchChange(value);
+    }
+  };
+  
+  // Filter players based on position filter only (search is handled server-side)
   const filteredPlayers = players.filter((player) => {
-    const matchesSearch = localSearchQuery === '' || 
-      player.name.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
-      (player.full_name && player.full_name.toLowerCase().includes(localSearchQuery.toLowerCase())) ||
-      (player.team && player.team.toLowerCase().includes(localSearchQuery.toLowerCase()));
-    
     const matchesPosition = positionFilter === '' || 
       (player.position && player.position.includes(positionFilter));
     
-    return matchesSearch && matchesPosition;
+    return matchesPosition;
   });
   
   // Calculate pagination
@@ -97,12 +101,12 @@ export default function PlayerGrid({
               className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#17408B] dark:focus:ring-[#FDBB30] focus:border-[#17408B] dark:focus:border-[#FDBB30] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all"
               placeholder="Search players by name or team..."
               value={localSearchQuery}
-              onChange={(e) => setLocalSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
 />
             {localSearchQuery && (
               <button
                 className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                onClick={() => setLocalSearchQuery('')}
+                onClick={() => handleSearchChange('')}
               >
                 <X className="h-5 w-5" />
               </button>
