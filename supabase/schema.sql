@@ -97,7 +97,6 @@ CREATE TABLE IF NOT EXISTS user_rankings (
 CREATE TABLE IF NOT EXISTS aggregated_rankings (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     player_id UUID NOT NULL REFERENCES players(id) ON DELETE CASCADE, -- Links to the player in this aggregated ranking
-    ranking_type INTEGER NOT NULL, -- Indicates which list type: 10, 25, 50, or 100 players
     points INTEGER NOT NULL, -- Total points accumulated based on ranking positions (higher is better)
     average_rank DECIMAL(5,2) NOT NULL, -- Mean position across all user rankings (lower is better)
     appearances INTEGER NOT NULL, -- Count of how many users included this player in their rankings
@@ -105,10 +104,8 @@ CREATE TABLE IF NOT EXISTS aggregated_rankings (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(), -- Timestamp when the aggregated ranking was created
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(), -- Timestamp when the aggregated ranking was last updated
     
-    -- Each player can only have one rank per day per ranking type
-    UNIQUE(player_id, ranking_type, calculation_date),
-    -- Each rank can only be used once per day per ranking type
-    UNIQUE(rank, ranking_type, calculation_date)
+    -- Each player can only have one aggregated ranking per day
+    UNIQUE(player_id, calculation_date)
 );
 
 -- User indexes for authentication and duplicate prevention
@@ -123,7 +120,7 @@ CREATE INDEX IF NOT EXISTS idx_user_rankings_type ON user_rankings(ranking_type)
 
 -- Aggregated ranking indexes for display and historical tracking
 CREATE INDEX IF NOT EXISTS idx_aggregated_rankings_date ON aggregated_rankings(calculation_date); -- For retrieving rankings from a specific date
-CREATE INDEX IF NOT EXISTS idx_aggregated_rankings_type ON aggregated_rankings(ranking_type); -- For filtering by ranking type (10/25/50/100)
+CREATE INDEX IF NOT EXISTS idx_aggregated_rankings_points ON aggregated_rankings(points); -- For sorting by points
 
 -- Row Level Security is disabled for population - enable later with proper policies
 -- ALTER TABLE players ENABLE ROW LEVEL SECURITY;

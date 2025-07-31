@@ -100,24 +100,30 @@ export class RankingService {
     calculationDate: string
   ): Promise<void> {
     for (const { playerId, rank } of rankings) {
-      const points = rankingType + 1 - rank;
-      // Try to update existing row
+      // Calculate points based on absolute position
+      // This ensures that the same position gets the same points regardless of ranking type
+      // For example, 1st place always gets 100 points, 10th place always gets 91 points
+      const points = Math.max(101 - rank, 1); // Ensures minimum 1 point, 1st place gets 100 points
+      
+      // Try to update existing row - now without ranking_type filter
       const { data, error } = await this.supabase
         .from('aggregated_rankings')
         .select('id, points, appearances, average_rank')
         .eq('player_id', playerId)
-        .eq('ranking_type', rankingType)
         .eq('calculation_date', calculationDate)
         .maybeSingle();
+      
       if (error) {
         console.error(`[upsertAggregatedRankings] Error selecting row for playerId ${playerId}:`, error);
         continue;
       }
+      
       if (data) {
         // Row exists: update it
         const newPoints = data.points + points;
         const newAppearances = data.appearances + 1;
         const newAvg = ((data.average_rank * data.appearances) + rank) / newAppearances;
+        
         const { error: updateError } = await this.supabase
           .from('aggregated_rankings')
           .update({
@@ -127,6 +133,7 @@ export class RankingService {
             updated_at: new Date().toISOString(),
           })
           .eq('id', data.id);
+          
         if (updateError) {
           console.error(`[upsertAggregatedRankings] Error updating row for playerId ${playerId}:`, updateError);
         }
@@ -134,7 +141,6 @@ export class RankingService {
         // Row does not exist: insert
         const insertObj = {
           player_id: playerId,
-          ranking_type: rankingType,
           calculation_date: calculationDate,
           points,
           appearances: 1,
@@ -142,9 +148,11 @@ export class RankingService {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         };
+        
         const { error: insertError } = await this.supabase
           .from('aggregated_rankings')
           .insert(insertObj);
+          
         if (insertError) {
           console.error(`[upsertAggregatedRankings] Error inserting row for playerId ${playerId}:`, insertError, insertObj);
         }
@@ -203,7 +211,9 @@ export class RankingService {
    */
   async getAggregatedRankings(rankingType: number, date?: string, limit?: number): Promise<any[]> {
     const targetDate = date || new Date().toISOString().split('T')[0];
-    let query = this.supabase
+    
+    // Get all aggregated rankings - now we don't filter by ranking_type
+    const { data: rankings, error } = await this.supabase
       .from('aggregated_rankings')
       .select(`
         *,
@@ -211,15 +221,13 @@ export class RankingService {
           id, name, full_name, position, team, image_url, ppg, rpg, apg, championships, mvps, all_star
         )
       `)
-      .eq('ranking_type', rankingType)
-      .eq('calculation_date', targetDate)
-      .order('points', { ascending: false })
-      .order('average_rank', { ascending: true });
-    if (limit) {
-      query = query.limit(limit);
-    }
-    const { data, error } = await query;
+      .order('points', { ascending: false });
+    
     if (error) throw error;
-    return data || [];
+    if (!rankings || rankings.length === 0) return [];
+    
+    // Apply limit based on the requested ranking type
+    const effectiveLimit = limit || rankingType;
+    return rankings.slice(0, effectiveLimit);
   }
 }

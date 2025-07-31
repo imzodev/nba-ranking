@@ -50,6 +50,33 @@ npm run dev
 
 ## 📊 How It Works
 
+### Ranking System
+
+Our ranking system uses a fair and consistent point allocation method to aggregate user submissions:
+
+#### Points Calculation
+- Each player receives points based on their position in a user's ranking list
+- 1st place: 100 points
+- 2nd place: 99 points
+- 10th place: 91 points
+- 50th place: 51 points
+- 100th place: 1 point
+
+#### Key Features
+- **Position-Based Scoring**: Points are calculated as `101 - rank` (minimum 1 point)
+- **Consistent Across Lists**: The same position gets the same points regardless of ranking type (top 10, 25, 50, or 100)
+- **Fair Aggregation**: All user submissions contribute equally to the final rankings
+- **Unified Rankings**: The top 10 is always the first 10 players from the top 25, which is always the first 25 from the top 50, etc.
+
+#### Aggregation Process
+1. Users submit their rankings (top 10, 25, 50, or 100)
+2. Each player receives points based on their position
+3. Points are aggregated across all user submissions
+4. Players are sorted by total points (descending) and average rank (ascending for tiebreakers)
+5. The resulting list represents the collective wisdom of all participants
+
+### Technical Implementation
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
