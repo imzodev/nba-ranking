@@ -33,4 +33,6 @@ export interface AggregatedRanking {
   points: number;
   ranking_type: RankingType;
   aggregation_date: string;
+  calculation_date?: string;
+  players?: Player; // Include the joined player data
 }

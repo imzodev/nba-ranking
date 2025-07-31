@@ -6,14 +6,15 @@ import { isValidRankingType } from '@/lib/utils/validation';
  * GET /api/rankings/aggregated/[type]
  * Get aggregated rankings for a specific type
  */
-export async function GET(
-  request: Request,
-  context: { params: { type: string } }
-) {
-  const { params } = context;
+export async function GET(request: Request, context: any) {
   try {
-    const rankingType = parseInt(params.type);
-    const { searchParams } = new URL(request.url);
+    // Extract the type from the URL path instead of using params
+    const url = new URL(request.url);
+    const pathParts = url.pathname.split('/');
+    const typeStr = pathParts[pathParts.length - 1];
+    const rankingType = parseInt(typeStr);
+    
+    const { searchParams } = url;
     const date = searchParams.get('date');
     
     if (!isValidRankingType(rankingType)) {
@@ -27,6 +28,7 @@ export async function GET(
     const limit = limitParam ? parseInt(limitParam) : undefined;
     const rankingService = new RankingService();
     const rankings = await rankingService.getAggregatedRankings(rankingType, date || undefined, limit);
+    console.log('rankings count', rankings.length);
     
     return NextResponse.json({ rankings });
   } catch (error: any) {

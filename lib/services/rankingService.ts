@@ -212,22 +212,23 @@ export class RankingService {
   async getAggregatedRankings(rankingType: number, date?: string, limit?: number): Promise<any[]> {
     const targetDate = date || new Date().toISOString().split('T')[0];
     
-    // Get all aggregated rankings - now we don't filter by ranking_type
+    // Get aggregated rankings limited to the requested ranking type
+    const effectiveLimit = limit || rankingType;
     const { data: rankings, error } = await this.supabase
       .from('aggregated_rankings')
       .select(`
-        *,
+        player_id, points, average_rank, appearances, calculation_date,
         players:player_id (
-          id, name, full_name, position, team, image_url, ppg, rpg, apg, championships, mvps, all_star
+          id, name, position, team, image_url
         )
       `)
-      .order('points', { ascending: false });
+      .order('points', { ascending: false })
+      .limit(effectiveLimit);
     
     if (error) throw error;
     if (!rankings || rankings.length === 0) return [];
     
     // Apply limit based on the requested ranking type
-    const effectiveLimit = limit || rankingType;
-    return rankings.slice(0, effectiveLimit);
+    return rankings;
   }
 }

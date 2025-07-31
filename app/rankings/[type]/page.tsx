@@ -32,27 +32,24 @@ export default function RankingsPage() {
       setError('');
       
       try {
-        // Fetch all players first to have their data
-        const playersResponse = await fetch('/api/players');
-        if (!playersResponse.ok) {
-          throw new Error('Failed to fetch players');
-        }
-        
-        const playersData = await playersResponse.json() as Player[];
-        const playersMap: Record<string, Player> = {};
-        playersData.forEach((player: Player) => {
-          playersMap[player.id] = player;
-        });
-        
-        setPlayers(playersMap);
-        
-        // Fetch aggregated rankings
+        // Fetch aggregated rankings with player data included
         const rankingsResponse = await fetch(`/api/rankings/aggregated/${Number(rankingType)}?limit=${rankingType}`);
         if (!rankingsResponse.ok) {
           throw new Error('Failed to fetch rankings');
         }
         
         const rankingsData = await rankingsResponse.json() as { rankings: AggregatedRanking[], lastUpdated: string };
+        
+        // Extract player data from the rankings response
+        const playersMap: Record<string, Player> = {};
+        rankingsData.rankings.forEach(ranking => {
+          // The players property is nested inside each ranking
+          if (ranking.players) {
+            playersMap[ranking.player_id] = ranking.players;
+          }
+        });
+        
+        setPlayers(playersMap);
         setRankings(rankingsData.rankings || []);
         
         // Format the last updated date
@@ -108,11 +105,17 @@ export default function RankingsPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-8 max-w-4xl mx-auto">
-            {rankings.slice(0, rankingType).map((ranking, index) => {
-              const player = players[ranking.player_id];
-              if (!player) return null;
-              const place = index + 1;
-              return (
+            {rankings
+              .slice(0, rankingType)
+              .map((ranking, index) => {
+                // If player data is missing, create a placeholder player object
+                const player = players[ranking.player_id] || {
+                  id: ranking.player_id,
+                  name: `Player ${ranking.player_id.substring(0, 5)}...`,
+                  image_url: null
+                };
+                const place = index + 1; // Rank is based on original index
+                return (
                 <div key={ranking.player_id} className="relative overflow-hidden flex bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-100 dark:border-gray-800 transition-all hover:shadow-lg group">
                   <div className="flex flex-row w-full items-center z-10">
                     {/* Left Side - Image with Rank Number */}
