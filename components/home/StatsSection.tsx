@@ -4,13 +4,13 @@ import { Trophy, Users, Layers } from "lucide-react";
 const stats = [
   {
     label: "Rankings Created",
-    value: "10K+",
+    value: "1K+",
     icon: <Trophy className="w-10 h-10 text-[#17408B] mb-4" strokeWidth={2.2} />,
     gradient: "from-[#17408B]/10 to-[#17408B]/5 dark:from-[#17408B]/30 dark:to-slate/10"
   },
   {
     label: "NBA Players",
-    value: "500+",
+    value: "5000+",
     icon: <Users className="w-10 h-10 text-[#C9082A] mb-4" strokeWidth={2.2} />,
     gradient: "from-[#C9082A]/10 to-[#C9082A]/5 dark:from-[#C9082A]/30 dark:to-slate/10"
   },

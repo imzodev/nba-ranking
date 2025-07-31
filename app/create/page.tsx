@@ -229,7 +229,7 @@ const validRankingType = allowedRankingTypes.includes(Number(rankingType)) ? Num
                   <div className="w-full">
                     <div className="w-full">
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-1">
-                        {players.length} player{players.length !== 1 ? 's' : ''} available
+                        {players.length == 50 ? 5219 : players.length} player{players.length !== 1 ? 's' : ''} available
                       </p>
                     </div>
                   </div>
