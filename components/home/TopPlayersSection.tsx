@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Player } from '@/lib/types/Player';
-import { RankingType } from '@/lib/utils/constants';
+import { ListFilter } from 'lucide-react';
 
 interface TopPlayer {
   player_id: string;
@@ -112,12 +113,12 @@ export default function TopPlayersSection() {
         )}
         
         <div className="mt-12 text-center">
-          <a 
-            href="/rankings" 
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition-colors"
+          <Link 
+            href="/rankings/25" 
+            className="inline-flex items-center justify-center gap-2 px-8 py-3 text-lg font-bold rounded-md shadow-md text-white bg-indigo-800 hover:bg-indigo-900 transition-all duration-200"
           >
-            View Full Rankings
-          </a>
+            View Full Rankings <ListFilter className="h-5 w-5" />
+          </Link>
         </div>
       </div>
     </section>
