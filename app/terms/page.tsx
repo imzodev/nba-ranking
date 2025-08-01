@@ -22,8 +22,8 @@ export default function TermsPage() {
           
           <div className="mt-6 space-y-8 text-gray-600 dark:text-gray-300">
             <p>
-              Welcome to NBA Ultimate Rankings! These Terms of Service ("Terms") govern your access to and use of our website, 
-              services, and applications (collectively, the "Services"). By accessing or using our Services, you agree to be 
+              Welcome to NBA Ultimate Rankings! These Terms of Service (&quot;Terms&quot;) govern your access to and use of our website, 
+              services, and applications (collectively, the &quot;Services&quot;). By accessing or using our Services, you agree to be 
               bound by these Terms.
             </p>
             
@@ -36,7 +36,7 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">2. Changes to Terms</h2>
             <p>
               We may modify these Terms at any time. If we make changes, we will provide notice of such changes, such as by 
-              sending an email notification, providing notice through our Services, or updating the "Last Updated" date at the 
+              sending an email notification, providing notice through our Services, or updating the &quot;Last Updated&quot; date at the 
               top of these Terms. Your continued use of our Services following notification of changes will constitute your 
               acceptance of such changes.
             </p>
@@ -50,7 +50,7 @@ export default function TermsPage() {
             
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">4. User Content</h2>
             <p>
-              Our Services allow you to create and submit player rankings (collectively, "User Content"). You retain all rights in, 
+              Our Services allow you to create and submit player rankings (collectively, &quot;User Content&quot;). You retain all rights in, 
               and are solely responsible for, the rankings you submit to our Services.
             </p>
             <p>
@@ -84,7 +84,7 @@ export default function TermsPage() {
             
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">7. Disclaimer of Warranties</h2>
             <p>
-              OUR SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+              OUR SERVICES ARE PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
               INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, 
               AND NON-INFRINGEMENT.
             </p>

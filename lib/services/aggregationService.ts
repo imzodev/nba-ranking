@@ -15,7 +15,7 @@ export class AggregationService {
    * @param rankingType Type of ranking (10, 25, 50, or 100)
    * @returns Success status
    */
-  async calculateAggregatedRankings(rankingType: number): Promise<{ success: boolean, error?: any }> {
+  public async calculateAggregatedRankings(rankingType: number): Promise<{ success: boolean, error?: string }> {
     try {
       // Validate ranking type
       if (![10, 25, 50, 100].includes(rankingType)) {
@@ -29,7 +29,7 @@ export class AggregationService {
         .eq('ranking_type', rankingType);
       
       if (rankingsError) {
-        return { success: false, error: rankingsError };
+        return { success: false, error: rankingsError.message || 'Database error occurred' };
       }
       
       if (!rankings || rankings.length === 0) {
@@ -69,12 +69,12 @@ export class AggregationService {
         .insert(aggregatedRankings);
       
       if (insertError) {
-        return { success: false, error: insertError };
+        return { success: false, error: insertError.toString() || 'Database error occurred' };
       }
       
       return { success: true };
-    } catch (error) {
-      return { success: false, error };
+    } catch (error: unknown) {
+      return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' };
     }
   }
   
@@ -84,7 +84,7 @@ export class AggregationService {
    * @param rankingType Type of ranking (10, 25, 50, or 100)
    * @returns Object with player statistics
    */
-  private calculatePlayerStats(rankings: any[], rankingType: number) {
+  private calculatePlayerStats(rankings: {player_id: string, rank: number}[], rankingType: number) {
     const playerStats: {
       [key: string]: {
         totalRank: number;
@@ -128,7 +128,7 @@ export class AggregationService {
    * Run daily aggregation for all ranking types
    * This method should be called by a scheduled job
    */
-  async runDailyAggregation(): Promise<{ success: boolean, error?: any }> {
+  async runDailyAggregation(): Promise<{ success: boolean, error?: string }> {
     try {
       const rankingTypes = [10, 25, 50, 100];
       
@@ -141,8 +141,8 @@ export class AggregationService {
       }
       
       return { success: true };
-    } catch (error) {
-      return { success: false, error };
+    } catch (error: unknown) {
+      return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' };
     }
   }
 }

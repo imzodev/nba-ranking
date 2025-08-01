@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
-import Image from 'next/image';
+
 import { RANKING_TYPE_LABELS, RANKING_TYPES, type RankingType } from '@/lib/utils/constants';
 import PlayerAvatar from '@/components/player/PlayerAvatar';
 

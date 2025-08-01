@@ -1,5 +1,5 @@
 export interface Player {
-  id: string;
+  [key: string]: unknown;
   name: string;
   full_name?: string;
   position?: string;
@@ -23,7 +23,7 @@ export interface Player {
   career_start?: string;
   career_end?: string;
   years_active?: string;
-  career_history?: any[];
+  career_history?: string[];
   
   // Career stats
   points?: number;
@@ -42,17 +42,18 @@ export interface Player {
   all_defensive?: number;
   rookie_of_year?: boolean;
   hall_of_fame?: boolean;
+  social_media?: Record<string, string>;
   
   // Awards and highlights
-  highlights?: any[];
-  medals?: any[];
+  highlights?: string[];
+  awards?: string[];
   
   // Images and media
   image_url?: string;
   wikipedia_url?: string;
   
   // Raw data for reference
-  raw_infobox?: any;
+  raw_infobox?: Record<string, unknown>;
   
   created_at?: string;
   updated_at?: string;

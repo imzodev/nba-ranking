@@ -26,12 +26,12 @@ export class RankingService {
     ipAddress: string, 
     rankings: Array<{playerId: string, rank: number}>, 
     rankingType: number
-  ): Promise<{ success: boolean, error: any }> {
+  ): Promise<{ success: boolean, error?: string }> {
     // Validate ranking type
     if (![10, 25, 50, 100].includes(rankingType)) {
       return { 
         success: false, 
-        error: { message: 'Invalid ranking type. Must be 10, 25, 50, or 100.' } 
+        error: 'Invalid ranking type. Must be 10, 25, 50, or 100.' 
       };
     }
     
@@ -39,7 +39,7 @@ export class RankingService {
     if (rankings.length !== rankingType) {
       return { 
         success: false, 
-        error: { message: `Ranking must contain exactly ${rankingType} players.` } 
+        error: `Ranking must contain exactly ${rankingType} players.` 
       };
     }
     
@@ -47,7 +47,7 @@ export class RankingService {
     const { data: user, error: userError } = await this.userService.createOrUpdateUser(email, name, ipAddress);
     
     if (userError || !user) {
-      return { success: false, error: userError };
+      return { success: false, error: userError.message || 'Database error occurred' };
     }
     
     const today = new Date().toISOString().split('T')[0];
@@ -74,18 +74,18 @@ export class RankingService {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
-    const { error: rankingsError } = await this.supabase
+    const { error } = await this.supabase
       .from('user_rankings')
       .insert([rowToInsert]);
     
-    if (rankingsError) {
-      return { success: false, error: rankingsError };
+    if (error) {
+      return { success: false, error: error.message || 'Database error occurred' };
     }
 
     // Update aggregated rankings
     await this.upsertAggregatedRankings(rankings, rankingType, today);
 
-    return { success: true, error: null };
+    return { success: true, error: undefined };
   }
 
   /**

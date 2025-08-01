@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import PlayerGrid from '@/components/player/PlayerGrid';
 import PlayerDrawer from '@/components/player/PlayerDrawer';
@@ -27,10 +27,9 @@ export default function CreateRankingPage() {
 
 // Always keep rankingType as a valid number
 const allowedRankingTypes = [10, 25, 50, 100];
-const validRankingType = allowedRankingTypes.includes(Number(rankingType)) ? Number(rankingType) : undefined;
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submissionSuccess, setSubmissionSuccess] = useState<boolean>(false);
-  const [submissionError, setSubmissionError] = useState<string>('');
+  const [, setSubmissionError] = useState<string>('');
   
   // State for search query and loading state
   const [searchQuery, setSearchQuery] = useState<string>('');

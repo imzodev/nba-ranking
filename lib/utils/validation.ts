@@ -1,4 +1,4 @@
-import { EMAIL_REGEX, MIN_NAME_LENGTH, MAX_NAME_LENGTH, RANKING_TYPES } from './constants';
+import { EMAIL_REGEX, MIN_NAME_LENGTH, MAX_NAME_LENGTH, RANKING_TYPES, type RankingType } from './constants';
 import { RankingSubmission } from '../types/Ranking';
 
 /**
@@ -25,7 +25,7 @@ export const isValidName = (name: string): boolean => {
  * @returns Boolean indicating if ranking type is valid
  */
 export const isValidRankingType = (rankingType: number): boolean => {
-  return RANKING_TYPES.includes(rankingType as any);
+  return RANKING_TYPES.includes(rankingType as RankingType);
 };
 
 /**
