@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
 import Image from 'next/image';
 import { RANKING_TYPE_LABELS, RANKING_TYPES, type RankingType } from '@/lib/utils/constants';
+import PlayerAvatar from '@/components/player/PlayerAvatar';
 
 function isRankingType(val: number): val is RankingType {
   return RANKING_TYPES.includes(val as RankingType);
@@ -120,23 +121,10 @@ export default function RankingsPage() {
                   <div className="flex flex-row w-full items-center z-10">
                     {/* Left Side - Image with Rank Number */}
                     <div className="relative flex-shrink-0" style={{ width: '150px', height: '150px' }}>
-                      {/* Player Image */}
-                      {player.image_url ? (
-                        <div className="h-full w-full flex items-center justify-center overflow-hidden">
-                          <Image
-                            src={player.image_url}
-                            alt={player.name}
-                            width={150}
-                            height={150}
-                            className="h-full w-full object-cover"
-                            priority
-                          />
-                        </div>
-                      ) : (
-                        <div className="h-full w-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-5xl font-light text-gray-500 dark:text-gray-400">
-                          <span>{player.name[0]}</span>
-                        </div>
-                      )}
+                      {/* Player Image - Using PlayerAvatar component */}
+                      <div className="h-full w-full relative">
+                        <PlayerAvatar player={player} />
+                      </div>
                       
                       {/* Rank Number in corner with background */}
                       <div className={`absolute top-0 left-0 px-3 py-1 font-bold text-xl z-10 rounded-br-lg text-white ${place === 1 ? 'bg-amber-500' : place === 2 ? 'bg-gray-400' : place === 3 ? 'bg-amber-700' : 'bg-[#FF6B00]'}`}> 
