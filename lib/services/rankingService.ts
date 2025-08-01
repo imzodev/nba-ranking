@@ -54,17 +54,22 @@ export class RankingService {
     
     const today = new Date().toISOString().split('T')[0];
     
-    // Check if user has already submitted this ranking type today
-    const hasSubmitted = await this.userService.hasSubmittedToday(email, rankingType);
+    // Check if this IP address has already submitted this ranking type today
+    const { count: ipCount, error: ipError } = await this.supabase
+      .from('user_rankings')
+      .select('*', { count: 'exact', head: true })
+      .eq('ip_address', ipAddress)
+      .eq('ranking_type', rankingType);
     
-    if (hasSubmitted) {
-      // Delete previous submission for today
-      await this.supabase
-        .from('user_rankings')
-        .delete()
-        .eq('user_id', user.id)
-        .eq('ranking_type', rankingType)
-        .eq('submission_date', today);
+    if (ipError) {
+      return { success: false, error: ipError.message || 'Database error occurred' };
+    }
+    
+    if (ipCount && ipCount > 0) {
+      return { 
+        success: false, 
+        error: `You have already submitted a ${rankingType} player ranking today from this IP address.` 
+      };
     }
     
     // Insert a single row with rankings JSON
@@ -73,6 +78,7 @@ export class RankingService {
       ranking_type: rankingType,
       rankings: rankings,
       submission_date: today,
+      ip_address: ipAddress,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };

@@ -84,13 +84,16 @@ CREATE TABLE IF NOT EXISTS user_rankings (
     ranking_type INTEGER NOT NULL, -- Indicates which list type: 10, 25, 50, or 100 players
     rank INTEGER NOT NULL CHECK (rank BETWEEN 1 AND 100), -- The player's position in the user's list (1 = best)
     submission_date DATE NOT NULL DEFAULT CURRENT_DATE, -- Date when this ranking was submitted
+    ip_address TEXT NOT NULL, -- Stored to prevent multiple submissions from same IP for same ranking type
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     
     -- Each user can rank a player only once per submission per ranking type
     UNIQUE(user_id, player_id, ranking_type, submission_date),
     -- Each rank can only be used once per user per submission per ranking type
-    UNIQUE(user_id, rank, ranking_type, submission_date)
+    UNIQUE(user_id, rank, ranking_type, submission_date),
+    -- Each IP can only submit once per ranking type per day
+    UNIQUE(ip_address, ranking_type, submission_date)
 );
 
 -- Create table for daily aggregated rankings (the "ultimate" top N)
