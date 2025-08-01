@@ -45,8 +45,8 @@ export default function RankingsPage() {
         const playersMap: Record<string, Player> = {};
         rankingsData.rankings.forEach(ranking => {
           // The players property is nested inside each ranking
-          if (ranking.players) {
-            playersMap[ranking.player_id] = ranking.players;
+          if (ranking.player) {
+            playersMap[ranking.player_id] = ranking.player;
           }
         });
         

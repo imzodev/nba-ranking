@@ -54,22 +54,26 @@ export default function RankingList({
   const isTouch = useIsTouchDevice();
 
   // Configure sensors for drag detection
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 150, // Optional: slight delay for mobile
+      tolerance: 5,
+    },
+  });
+  
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 8,
+    },
+  });
+  
+  const keyboardSensor = useSensor(KeyboardSensor, {
+    coordinateGetter: sortableKeyboardCoordinates,
+  });
+  
   const sensors = useSensors(
-    isTouch
-      ? useSensor(TouchSensor, {
-          activationConstraint: {
-            delay: 150, // Optional: slight delay for mobile
-            tolerance: 5,
-          },
-        })
-      : useSensor(PointerSensor, {
-          activationConstraint: {
-            distance: 8,
-          },
-        }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    isTouch ? touchSensor : pointerSensor,
+    keyboardSensor
   );
 
   const handleDragStart = (event: DragStartEvent) => {

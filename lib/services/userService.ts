@@ -15,7 +15,7 @@ export class UserService {
    * @param ipAddress User's IP address
    * @returns The created or updated user
    */
-  async createOrUpdateUser(email: string, name: string, ipAddress: string): Promise<{ data: User | null, error: any }> {
+  async createOrUpdateUser(email: string, name: string, ipAddress: string): Promise<{ data: User | null, error: string | null }> {
     // Check if user exists with this email
     const { data: existingUser, error: findError } = await this.supabase
       .from('ranking_users')
@@ -24,7 +24,7 @@ export class UserService {
       .maybeSingle();
     
     if (findError) {
-      return { data: null, error: findError };
+      return { data: null, error: findError.message || 'Database error occurred' };
     }
     
     const today = new Date().toISOString().split('T')[0];
@@ -43,7 +43,7 @@ export class UserService {
         .select()
         .single();
       
-      return { data: data as User, error };
+      return { data: data as User, error: error?.message || null };
     } else {
       // Create new user
       const { data, error } = await this.supabase
@@ -58,7 +58,7 @@ export class UserService {
         .select()
         .single();
       
-      return { data: data as User, error };
+      return { data: data as User, error: error?.message || null };
     }
   }
   

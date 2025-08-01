@@ -1,6 +1,7 @@
 import { createClient } from '../supabase/client';
 import { UserService } from './userService';
-import { UserRanking, RankingSubmission } from '../types/Ranking';
+import type { RankingSubmission, AggregatedRanking } from '../types/Ranking';
+import type { RankingType } from '../utils/constants';
 
 export class RankingService {
   private supabase;
@@ -47,7 +48,7 @@ export class RankingService {
     const { data: user, error: userError } = await this.userService.createOrUpdateUser(email, name, ipAddress);
     
     if (userError || !user) {
-      return { success: false, error: userError.message || 'Database error occurred' };
+      return { success: false, error: typeof userError === 'string' ? userError : 'Database error occurred' };
     }
     
     const today = new Date().toISOString().split('T')[0];
@@ -209,7 +210,7 @@ export class RankingService {
    * @param limit Optional max number of players to return
    * @returns Array of aggregated rankings with player details
    */
-  async getAggregatedRankings(rankingType: number, date?: string, limit?: number): Promise<any[]> {
+  async getAggregatedRankings(rankingType: RankingType, date?: string, limit?: number): Promise<AggregatedRanking[]> {
     const targetDate = date || new Date().toISOString().split('T')[0];
     
     // Get aggregated rankings limited to the requested ranking type
@@ -218,7 +219,7 @@ export class RankingService {
       .from('aggregated_rankings')
       .select(`
         player_id, points, average_rank, appearances, calculation_date,
-        players:player_id (
+        player:player_id (
           id, name, position, team, image_url
         )
       `)
@@ -228,7 +229,15 @@ export class RankingService {
     if (error) throw error;
     if (!rankings || rankings.length === 0) return [];
     
-    // Apply limit based on the requested ranking type
-    return rankings;
+    // Map the response to match our AggregatedRanking interface
+    return rankings.map((ranking) => ({
+      player_id: ranking.player_id,
+      rank: 0, // This will be calculated based on position
+      points: ranking.points,
+      ranking_type: rankingType,
+      aggregation_date: ranking.calculation_date,
+      calculation_date: ranking.calculation_date,
+      player: ranking.player && ranking.player.length > 0 ? ranking.player[0] : undefined
+    }));
   }
 }

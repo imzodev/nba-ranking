@@ -3,6 +3,7 @@ import { RankingService } from '@/lib/services/rankingService';
 import { validateRankingSubmission } from '@/lib/utils/validation';
 import { RankingSubmission } from '@/lib/types/Ranking';
 import { headers } from 'next/headers';
+import { RankingType } from '@/lib/utils/constants';
 
 /**
  * POST /api/rankings
@@ -68,7 +69,7 @@ export async function GET(request: Request) {
     const date = searchParams.get('date');
     
     const rankingService = new RankingService();
-    const rankings = await rankingService.getAggregatedRankings(rankingType, date || undefined);
+    const rankings = await rankingService.getAggregatedRankings(rankingType as RankingType, date || undefined);
     
     return NextResponse.json({ rankings });
   } catch (error: unknown) {
