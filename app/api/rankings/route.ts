@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     
     if (!success) {
       return NextResponse.json(
-        { error: 'Failed to submit rankings', details: error },
+        { error: error ? error : 'Failed to submit rankings', details: error },
         { status: 500 }
       );
     }

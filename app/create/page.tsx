@@ -175,7 +175,9 @@ export default function CreateRankingPage() {
       });
 
       if (!rankingResponse.ok) {
-        throw new Error('Failed to submit ranking');
+        // Parse the error response to get the actual error message
+        const errorData = await rankingResponse.json();
+        throw new Error(errorData.error || 'Failed to submit ranking');
       }
 
       setSubmissionSuccess(true);
@@ -303,20 +305,6 @@ export default function CreateRankingPage() {
                   </p>
                 </div>
                 
-                {submissionError && (
-                  <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-md p-4 mb-6">
-                    <div className="flex items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-400 mt-0.5 mr-3 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                      </svg>
-                      <div>
-                        <h3 className="text-sm font-medium text-red-800 dark:text-red-200">Submission Error</h3>
-                        <p className="mt-1 text-sm text-red-700 dark:text-red-300">{submissionError}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
                 <RankingList
                   players={selectedPlayers}
                   onReorder={handleReorderPlayers}
@@ -342,6 +330,7 @@ export default function CreateRankingPage() {
                       rankingType={rankingType}
                       onSubmit={handleSubmitRanking}
                       isSubmitting={isSubmitting}
+                      error={submissionError}
                     />
                   </div>
                 )}

@@ -68,7 +68,7 @@ export class RankingService {
     if (ipCount && ipCount > 0) {
       return { 
         success: false, 
-        error: `You have already submitted a ${rankingType} player ranking today from this IP address.` 
+        error: `You have already submitted a ${rankingType} player ranking from this IP address.` 
       };
     }
     

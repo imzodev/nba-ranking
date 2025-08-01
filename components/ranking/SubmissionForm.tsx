@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mail, User, AlertCircle, Send, Loader2 } from 'lucide-react';
 import { isValidEmail, isValidName } from '@/lib/utils/validation';
 import type { Player } from '@/lib/types/Player';
@@ -10,6 +10,7 @@ interface SubmissionFormProps {
   rankingType: number;
   onSubmit: (submission: RankingSubmission) => Promise<void>;
   isSubmitting?: boolean;
+  error?: string;
 }
 
 export default function SubmissionForm({
@@ -17,12 +18,20 @@ export default function SubmissionForm({
   rankingType,
   onSubmit,
   isSubmitting = false,
+  error,
 }: SubmissionFormProps) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [emailError, setEmailError] = useState('');
   const [nameError, setNameError] = useState('');
   const [submissionError, setSubmissionError] = useState('');
+  
+  // Use external error if provided
+  useEffect(() => {
+    if (error) {
+      setSubmissionError(error);
+    }
+  }, [error]);
   
   const validateForm = (): boolean => {
     let isValid = true;
