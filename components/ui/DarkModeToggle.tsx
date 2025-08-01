@@ -43,20 +43,6 @@ export default function DarkModeToggle() {
     }
   };
   
-  // Add a method to use system preference
-  const useSystemPreference = () => {
-    localStorage.removeItem('theme');
-    // Dispatch storage event for other tabs
-    window.dispatchEvent(new StorageEvent('storage', {
-      key: 'theme',
-      newValue: null,
-      storageArea: localStorage
-    }));
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.classList.toggle('dark', prefersDark);
-    setIsDarkMode(prefersDark);
-  };
-
   return (
     <button
       onClick={toggleDarkMode}

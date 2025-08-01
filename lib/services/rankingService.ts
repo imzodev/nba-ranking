@@ -1,6 +1,6 @@
 import { createClient } from '../supabase/client';
 import { UserService } from './userService';
-import type { RankingSubmission, AggregatedRanking } from '../types/Ranking';
+import type { AggregatedRanking } from '../types/Ranking';
 import type { RankingType } from '../utils/constants';
 import { Player } from '../types/Player';
 
@@ -212,8 +212,6 @@ export class RankingService {
    * @returns Array of aggregated rankings with player details
    */
   async getAggregatedRankings(rankingType: RankingType, date?: string, limit?: number): Promise<AggregatedRanking[]> {
-    const targetDate = date || new Date().toISOString().split('T')[0];
-    
     // Get aggregated rankings limited to the requested ranking type
     const effectiveLimit = limit || rankingType;
     const { data: rankings, error } = await this.supabase

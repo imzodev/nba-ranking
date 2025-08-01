@@ -1,5 +1,4 @@
-import { createClient as createSupabaseClient, SupabaseClient } from '@supabase/supabase-js';
-import { Database } from '@/lib/types/database.types';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 // Create a supabase client with admin privileges for server-side operations
 // IMPORTANT: This should ONLY be used in server-side code (API routes, Server Components, etc.)

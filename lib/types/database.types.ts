@@ -270,7 +270,7 @@ export interface Database {
         ]
       }
     }
-    Views: {}
+    Views: Record<string, never>
     Functions: {
       [_ in never]: never
     }
