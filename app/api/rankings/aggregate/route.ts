@@ -47,11 +47,12 @@ export async function POST(request: Request) {
       
       return NextResponse.json({ success: true, message: 'Daily aggregation completed successfully' });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error calculating aggregated rankings:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to calculate aggregated rankings', details: error.message },
+      { error: 'Failed to calculate aggregated rankings', details: errorMessage },
       { status: 500 }
     );
   }

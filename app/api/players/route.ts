@@ -38,11 +38,12 @@ export async function GET(request: Request) {
     
     // Return the players array directly
     return NextResponse.json(players);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching players:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to fetch players', details: error.message },
+      { error: 'Failed to fetch players', details: errorMessage },
       { status: 500 }
     );
   }

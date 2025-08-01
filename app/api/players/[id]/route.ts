@@ -30,11 +30,12 @@ export async function GET(
     }
     
     return NextResponse.json({ player });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching player details:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to fetch player details', details: error.message },
+      { error: 'Failed to fetch player details', details: errorMessage },
       { status: 500 }
     );
   }
