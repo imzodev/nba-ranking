@@ -39,7 +39,6 @@ export default function RankingsPage() {
           throw new Error('Failed to fetch rankings');
         }
 
-        console.log(`rankingsResponse ${rankingsResponse}`);
         
         const rankingsData = await rankingsResponse.json() as { rankings: AggregatedRanking[], lastUpdated: string };
         
@@ -51,12 +50,6 @@ export default function RankingsPage() {
             playersMap[ranking.player_id] = ranking.player;
           }
         });
-
-        console.log('players count', Object.keys(playersMap).length);
-        console.log(`playersMap ${playersMap}`);
-        for (const [key, value] of Object.entries(playersMap)) {
-          console.log(`${key}: ${value}`);
-        }
         
         
         setPlayers(playersMap);

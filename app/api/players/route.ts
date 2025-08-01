@@ -34,7 +34,6 @@ export async function GET(request: Request) {
       players = await playerService.getAllPlayers(limit);
     }
 
-    console.log(players);
     
     // Return the players array directly
     return NextResponse.json(players);

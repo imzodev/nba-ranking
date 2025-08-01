@@ -30,7 +30,6 @@ export async function GET(
     const limit = limitParam ? parseInt(limitParam) : undefined;
     const rankingService = new RankingService();
     const rankings = await rankingService.getAggregatedRankings(rankingType as RankingType, date || undefined, limit);
-    console.log('rankings count', rankings.length);
     
     return NextResponse.json({ rankings });
   } catch (error: unknown) {
