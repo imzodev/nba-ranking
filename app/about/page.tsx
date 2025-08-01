@@ -20,7 +20,7 @@ export default function AboutPage() {
           <div className="mt-6 space-y-8 text-gray-600 dark:text-gray-300">
             <p>
               NBA Ultimate Rankings is a platform that allows basketball fans to create, share, and discover 
-              rankings of NBA players. Whether you're debating the greatest of all time, comparing players from 
+              rankings of NBA players. Whether you&apos;re debating the greatest of all time, comparing players from 
               different eras, or just having fun organizing your favorite players, our platform makes it easy.
             </p>
             
@@ -45,14 +45,14 @@ export default function AboutPage() {
             
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Our Data</h2>
             <p>
-              Our player database includes comprehensive information on NBA players from the league's founding to the 
+              Our player database includes comprehensive information on NBA players from the league&apos;s founding to the 
               present day. Player information is sourced from publicly available data and is regularly updated to 
               ensure accuracy.
             </p>
             
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Contact Us</h2>
             <p>
-              Have questions, suggestions, or feedback? We'd love to hear from you! Contact us at 
+              Have questions, suggestions, or feedback? We&apos;d love to hear from you! Contact us at 
               <a href="mailto:contact@nbaultimaterankings.com" className="text-blue-600 dark:text-blue-400 hover:underline ml-1">
                 contact@nbaultimaterankings.com
               </a>
