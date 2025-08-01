@@ -3,6 +3,7 @@ import { Mail, User, AlertCircle, Send, Loader2 } from 'lucide-react';
 import { isValidEmail, isValidName } from '@/lib/utils/validation';
 import type { Player } from '@/lib/types/Player';
 import type { RankingSubmission } from '@/lib/types/Ranking';
+import { RankingType } from '@/lib/utils/constants';
 
 interface SubmissionFormProps {
   players: Player[];
@@ -82,7 +83,7 @@ export default function SubmissionForm({
     const submission: RankingSubmission = {
       email,
       name,
-      ranking_type: Number(rankingType),
+      ranking_type: Number(rankingType) as RankingType,
       rankings: players.map((player, index) => ({
         playerId: player.id,
         rank: index + 1,

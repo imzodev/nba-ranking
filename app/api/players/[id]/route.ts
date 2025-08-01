@@ -7,10 +7,10 @@ import { PlayerService } from '@/lib/services/playerService';
  */
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const playerId = params.id;
+    const { id: playerId } = await params;
     
     if (!playerId) {
       return NextResponse.json(

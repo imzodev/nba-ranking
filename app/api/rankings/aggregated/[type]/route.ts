@@ -7,9 +7,12 @@ import { RankingType } from '@/lib/utils/constants';
  * GET /api/rankings/aggregated/[type]
  * Get aggregated rankings for a specific type
  */
-export async function GET(request: Request, { params }: { params: { type: string } }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ type: string }> }
+) {
   try {
-    const typeStr = params.type;
+    const { type: typeStr } = await params;
     const rankingType = parseInt(typeStr);
     
     const url = new URL(request.url);
