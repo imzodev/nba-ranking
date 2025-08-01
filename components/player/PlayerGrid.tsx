@@ -6,19 +6,6 @@ import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 interface PlayerGridProps {
   players: Player[];
   onSelectPlayer?: (player: Player) => void;
-  onPlayerClick?: (player: Player) => void;
-  selectedPlayers?: Player[];
-  searchQuery?: string;
-  onSearchChange?: (query: string) => void;
-  positionFilter?: string;
-  showSearch?: boolean;
-  isLoading?: boolean;
-}
-
-interface PlayerGridProps {
-  players: Player[];
-  onSelectPlayer?: (player: Player) => void;
-  onPlayerClick?: (player: Player) => void;
   onPlayerDetails?: (player: Player) => void;
   selectedPlayers?: Player[];
   searchQuery?: string;
@@ -31,7 +18,6 @@ interface PlayerGridProps {
 export default function PlayerGrid({
   players,
   onSelectPlayer,
-  onPlayerClick,
   onPlayerDetails,
   selectedPlayers = [],
   searchQuery = '',

@@ -10,7 +10,6 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
-  DragStartEvent,
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -18,12 +17,8 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import PlayerCard from '../player/PlayerCard';
 import type { Player } from '@/lib/types/Player';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-
-import { SortableItem, SortableItemProps } from './SortableItem';
+import { SortableItem } from './SortableItem';
 
 interface RankingListProps {
   players: Player[];
@@ -50,7 +45,6 @@ export default function RankingList({
   onRemovePlayer,
   maxRank = 25,
 }: RankingListProps) {
-  const [isDragging, setIsDragging] = useState(false);
   const isTouch = useIsTouchDevice();
 
   // Configure sensors for drag detection
@@ -76,12 +70,7 @@ export default function RankingList({
     keyboardSensor
   );
 
-  const handleDragStart = (event: DragStartEvent) => {
-    setIsDragging(true);
-  };
-
   const handleDragEnd = (event: DragEndEvent) => {
-    setIsDragging(false);
     
     const { active, over } = event;
     
@@ -114,7 +103,6 @@ export default function RankingList({
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
           <SortableContext 

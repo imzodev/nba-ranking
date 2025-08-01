@@ -50,7 +50,7 @@ export default function PositionFilter({ selectedPosition, onPositionChange }: P
                   }
                   value={position.id}
                 >
-                  {({ selected, active }) => (
+                  {({ selected }) => (
                     <>
                       <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
                         {position.name}
