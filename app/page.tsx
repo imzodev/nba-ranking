@@ -3,18 +3,21 @@ import MainLayout from "@/components/layout/MainLayout";
 import HeroSection from "@/components/home/HeroSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import StatsSection from "@/components/home/StatsSection";
+import TopPlayersSection from "@/components/home/TopPlayersSection";
 
 export default function Home() {
   return (
     <MainLayout>
       <main className="overflow-hidden">
           <HeroSection />
+      {/* Stats Section */}
+      <StatsSection />
+
+      {/* Top Players Section */}
+      <TopPlayersSection />
 
       {/* Features Section */}
       <FeaturesSection />
-
-      {/* Stats Section */}
-      <StatsSection />
 
       {/* CTA Section */}
       <section className="py-20 bg-[#17408B] text-white relative overflow-hidden">
