@@ -96,16 +96,13 @@ CREATE TABLE IF NOT EXISTS user_rankings (
 -- Create table for daily aggregated rankings (the "ultimate" top N)
 CREATE TABLE IF NOT EXISTS aggregated_rankings (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    player_id UUID NOT NULL REFERENCES players(id) ON DELETE CASCADE, -- Links to the player in this aggregated ranking
+    player_id UUID NOT NULL REFERENCES players(id) ON DELETE CASCADE UNIQUE, -- Links to the player in this aggregated ranking (UNIQUE to prevent duplicates)
     points INTEGER NOT NULL, -- Total points accumulated based on ranking positions (higher is better)
     average_rank DECIMAL(5,2) NOT NULL, -- Mean position across all user rankings (lower is better)
     appearances INTEGER NOT NULL, -- Count of how many users included this player in their rankings
     calculation_date DATE NOT NULL DEFAULT CURRENT_DATE, -- Date when this aggregated ranking was calculated
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(), -- Timestamp when the aggregated ranking was created
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(), -- Timestamp when the aggregated ranking was last updated
-    
-    -- Each player can only have one aggregated ranking per day
-    UNIQUE(player_id, calculation_date)
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() -- Timestamp when the aggregated ranking was last updated
 );
 
 -- User indexes for authentication and duplicate prevention

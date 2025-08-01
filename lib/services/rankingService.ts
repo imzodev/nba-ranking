@@ -107,12 +107,12 @@ export class RankingService {
       // For example, 1st place always gets 100 points, 10th place always gets 91 points
       const points = Math.max(101 - rank, 1); // Ensures minimum 1 point, 1st place gets 100 points
       
-      // Try to update existing row - now without ranking_type filter
+      // Try to update existing row - without ranking_type or calculation_date filter
+      // We only care about player_id to prevent duplicates
       const { data, error } = await this.supabase
         .from('aggregated_rankings')
         .select('id, points, appearances, average_rank')
         .eq('player_id', playerId)
-        .eq('calculation_date', calculationDate)
         .maybeSingle();
       
       if (error) {
@@ -132,6 +132,7 @@ export class RankingService {
             points: newPoints,
             appearances: newAppearances,
             average_rank: newAvg,
+            calculation_date: calculationDate, // Update to the latest calculation date
             updated_at: new Date().toISOString(),
           })
           .eq('id', data.id);
