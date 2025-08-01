@@ -2,6 +2,7 @@ import { createClient } from '../supabase/client';
 import { UserService } from './userService';
 import type { RankingSubmission, AggregatedRanking } from '../types/Ranking';
 import type { RankingType } from '../utils/constants';
+import { Player } from '../types/Player';
 
 export class RankingService {
   private supabase;
@@ -237,7 +238,7 @@ export class RankingService {
       ranking_type: rankingType,
       aggregation_date: ranking.calculation_date,
       calculation_date: ranking.calculation_date,
-      player: ranking.player && ranking.player.length > 0 ? ranking.player[0] : undefined
+      player: ranking.player as unknown as Player // Direct mapping of the player object
     }));
   }
 }

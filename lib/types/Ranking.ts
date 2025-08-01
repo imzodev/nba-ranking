@@ -24,7 +24,7 @@ export interface RankingSubmission {
     playerId: string;
     rank: number;
   }>;
-  ranking_type: number; // 10, 25, 50, or 100
+  ranking_type: RankingType; // 10, 25, 50, or 100
 }
 
 export interface AggregatedRanking {

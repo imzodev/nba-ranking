@@ -1,5 +1,6 @@
 export interface Player {
   [key: string]: unknown;
+  id: string; // Explicitly define id as string for compatibility with @dnd-kit
   name: string;
   full_name?: string;
   position?: string;

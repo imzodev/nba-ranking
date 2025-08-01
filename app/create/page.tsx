@@ -8,7 +8,7 @@ import PlayerDetailsPanel from '@/components/player/PlayerDetailsPanel';
 import RankingList from '@/components/ranking/RankingList';
 import RankingTypeSelector from '@/components/ranking/RankingTypeSelector';
 import SubmissionForm from '@/components/ranking/SubmissionForm';
-import { RANKING_TYPES } from '@/lib/utils/constants';
+import { RANKING_TYPES, RankingType } from '@/lib/utils/constants';
 import type { Player } from '@/lib/types/Player';
 import type { RankingSubmission } from '@/lib/types/Ranking';
 
@@ -23,13 +23,13 @@ export default function CreateRankingPage() {
 
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
-  const [rankingType, setRankingType] = useState<number>(RANKING_TYPES[1]); // Default to Top 25
+  const [rankingType, setRankingType] = useState<RankingType>(RANKING_TYPES[1]); // Default to Top 25
 
-// Always keep rankingType as a valid number
-const allowedRankingTypes = [10, 25, 50, 100];
+  // Always keep rankingType as a valid number
+  const allowedRankingTypes = RANKING_TYPES;
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submissionSuccess, setSubmissionSuccess] = useState<boolean>(false);
-  const [, setSubmissionError] = useState<string>('');
+  const [submissionError, setSubmissionError] = useState<string>('');
   
   // State for search query and loading state
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -113,20 +113,34 @@ const allowedRankingTypes = [10, 25, 50, 100];
     setSelectedPlayers(reorderedPlayers);
   };
   
-  const handleRankingTypeChange = (type: number) => {
-    setRankingType(type);
-    
-    // If the new ranking type is smaller than the current selection, trim the list
-    if (selectedPlayers.length > type) {
-      setSelectedPlayers(selectedPlayers.slice(0, type));
+  const handleRankingTypeChange = (type: RankingType) => {
+    // Only allow valid ranking types
+    if (allowedRankingTypes.includes(type)) {
+      setRankingType(type);
+      
+      // If we have more players than the new ranking type allows, trim the list
+      if (selectedPlayers.length > type) {
+        setSelectedPlayers(selectedPlayers.slice(0, type));
+      }
     }
   };
   
   const handleSubmitRanking = async (submission: RankingSubmission) => {
     setIsSubmitting(true);
+    setSubmissionSuccess(false);
     setSubmissionError('');
     
     try {
+      // Validate that we have the correct number of players
+      if (submission.rankings.length !== submission.ranking_type) {
+        throw new Error(`You must select exactly ${submission.ranking_type} players for your ranking.`);
+      }
+      
+      // Validate that the ranking type is allowed
+      if (!allowedRankingTypes.includes(submission.ranking_type)) {
+        throw new Error('Invalid ranking type. Must be one of the allowed ranking types.');
+      }
+      
       // First, create or update the user
       const userResponse = await fetch('/api/users', {
         method: 'POST',
@@ -169,7 +183,8 @@ const allowedRankingTypes = [10, 25, 50, 100];
       setSelectedPlayers([]);
     } catch (error) {
       console.error('Error submitting ranking:', error);
-      setSubmissionError('Failed to submit ranking. Please try again.');
+      setSubmissionSuccess(false);
+      setSubmissionError(error instanceof Error ? error.message : 'An unknown error occurred');
     } finally {
       setIsSubmitting(false);
     }
@@ -287,6 +302,20 @@ const allowedRankingTypes = [10, 25, 50, 100];
                     Select the type of ranking you want to create. This will determine how many players you can include.
                   </p>
                 </div>
+                
+                {submissionError && (
+                  <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-md p-4 mb-6">
+                    <div className="flex items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-400 mt-0.5 mr-3 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <div>
+                        <h3 className="text-sm font-medium text-red-800 dark:text-red-200">Submission Error</h3>
+                        <p className="mt-1 text-sm text-red-700 dark:text-red-300">{submissionError}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 
                 <RankingList
                   players={selectedPlayers}

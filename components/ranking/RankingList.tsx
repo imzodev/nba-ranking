@@ -118,7 +118,7 @@ export default function RankingList({
           onDragEnd={handleDragEnd}
         >
           <SortableContext 
-            items={players.map(player => player.id)} 
+            items={players.map(player => player.id as string)} 
             strategy={verticalListSortingStrategy}
           >
             <div className="space-y-4">

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { RankingService } from '@/lib/services/rankingService';
 import { isValidRankingType } from '@/lib/utils/validation';
+import { RankingType } from '@/lib/utils/constants';
 
 /**
  * GET /api/rankings/aggregated/[type]
@@ -25,7 +26,7 @@ export async function GET(request: Request, { params }: { params: { type: string
     const limitParam = searchParams.get('limit');
     const limit = limitParam ? parseInt(limitParam) : undefined;
     const rankingService = new RankingService();
-    const rankings = await rankingService.getAggregatedRankings(rankingType as any, date || undefined, limit);
+    const rankings = await rankingService.getAggregatedRankings(rankingType as RankingType, date || undefined, limit);
     console.log('rankings count', rankings.length);
     
     return NextResponse.json({ rankings });

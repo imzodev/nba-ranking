@@ -1,9 +1,9 @@
 import { RadioGroup } from '@headlessui/react';
-import { RANKING_TYPES, RANKING_TYPE_LABELS } from '@/lib/utils/constants';
+import { RANKING_TYPES, RANKING_TYPE_LABELS, RankingType } from '@/lib/utils/constants';
 
 interface RankingTypeSelectorProps {
-  selectedType: number;
-  onChange: (type: number) => void;
+  selectedType: RankingType;
+  onChange: (type: RankingType) => void;
 }
 
 export default function RankingTypeSelector({ selectedType, onChange }: RankingTypeSelectorProps) {

@@ -25,7 +25,7 @@ export default function HeroSection() {
     
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
-  }, []);
+  }, [playerImages.length]);
   return (
     <section className="relative bg-gradient-to-br from-[#17408B] via-[#17408B]/90 to-[#C9082A]/80 dark:from-[#0a1836] dark:via-[#17408B]/80 dark:to-[#C9082A]/70 text-white min-h-[100vh] flex items-center">
       {/* Background pattern */}

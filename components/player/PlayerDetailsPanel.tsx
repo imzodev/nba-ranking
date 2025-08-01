@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Player } from '@/lib/types/Player';
+import Image from 'next/image';
 
 interface PlayerDetailsPanelProps {
   player: Player | null;
@@ -18,7 +19,7 @@ const PlayerDetailsPanel: React.FC<PlayerDetailsPanelProps> = ({ player }) => {
       <div className="p-6 pb-2">
         <div className="flex items-center gap-4 mb-4">
           {player.image_url && (
-            <img src={player.image_url} alt={player.name} className="w-20 h-20 rounded-full border-2 border-gray-200 dark:border-gray-700 object-cover" />
+            <Image src={player.image_url} alt={player.name} className="w-20 h-20 rounded-full border-2 border-gray-200 dark:border-gray-700 object-cover" width={80} height={80} />
           )}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{player.name}</h2>
