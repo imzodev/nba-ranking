@@ -1,5 +1,21 @@
 [
   {
+    "name": "Magic Johnson",
+    "slug": "Magic_Johnson",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Magic_Johnson",
+    "lists": [
+      "List_of_NBA_players_(A)"
+    ]
+  },
+  {
+    "name": "Shai Gilgeous-Alexander",
+    "slug": "Shai_Gilgeous-Alexander",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Shai_Gilgeous-Alexander",
+    "lists": [
+      "List_of_NBA_players_(A)"
+    ]
+  },
+  {
     "name": "Kareem Abdul-Jabbar",
     "slug": "Kareem_Abdul-Jabbar",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Kareem_Abdul-Jabbar",
