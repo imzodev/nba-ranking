@@ -6,14 +6,12 @@ import { isValidRankingType } from '@/lib/utils/validation';
  * GET /api/rankings/aggregated/[type]
  * Get aggregated rankings for a specific type
  */
-export async function GET(request: Request, context: any) {
+export async function GET(request: Request, { params }: { params: { type: string } }) {
   try {
-    // Extract the type from the URL path instead of using params
-    const url = new URL(request.url);
-    const pathParts = url.pathname.split('/');
-    const typeStr = pathParts[pathParts.length - 1];
+    const typeStr = params.type;
     const rankingType = parseInt(typeStr);
     
+    const url = new URL(request.url);
     const { searchParams } = url;
     const date = searchParams.get('date');
     
@@ -31,11 +29,12 @@ export async function GET(request: Request, context: any) {
     console.log('rankings count', rankings.length);
     
     return NextResponse.json({ rankings });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching aggregated rankings:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to fetch aggregated rankings', details: error.message },
+      { error: 'Failed to fetch aggregated rankings', details: errorMessage },
       { status: 500 }
     );
   }

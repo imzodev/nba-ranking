@@ -37,11 +37,12 @@ export async function GET(request: Request) {
     }
     
     return NextResponse.json({ rankings });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching user rankings:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to fetch user rankings', details: error.message },
+      { error: 'Failed to fetch user rankings', details: errorMessage },
       { status: 500 }
     );
   }

@@ -46,11 +46,12 @@ export async function POST(request: Request) {
     }
     
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error submitting rankings:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to submit rankings', details: error.message },
+      { error: 'Failed to submit rankings', details: errorMessage },
       { status: 500 }
     );
   }
@@ -70,11 +71,12 @@ export async function GET(request: Request) {
     const rankings = await rankingService.getAggregatedRankings(rankingType, date || undefined);
     
     return NextResponse.json({ rankings });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching aggregated rankings:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to fetch aggregated rankings', details: error.message },
+      { error: 'Failed to fetch aggregated rankings', details: errorMessage },
       { status: 500 }
     );
   }

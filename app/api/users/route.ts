@@ -44,11 +44,12 @@ export async function POST(request: Request) {
     }
     
     return NextResponse.json({ user });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating or updating user:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to create or update user', details: error.message },
+      { error: 'Failed to create or update user', details: errorMessage },
       { status: 500 }
     );
   }
@@ -88,11 +89,12 @@ export async function GET(request: Request) {
     }
     
     return NextResponse.json({ user });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching user:', error);
     
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json(
-      { error: 'Failed to fetch user', details: error.message },
+      { error: 'Failed to fetch user', details: errorMessage },
       { status: 500 }
     );
   }
